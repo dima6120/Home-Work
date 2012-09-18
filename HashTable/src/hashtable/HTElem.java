@@ -6,16 +6,19 @@
 package hashtable;
 
 public class HTElem {
-    protected String str;
-    protected int value;
+    protected String key;
+    private Object data;
     
-    public HTElem(String s, int v) {
-        str = s; value = v;
+    public HTElem(String k, Object d) {
+        key = k; data = d;
     }
-    public String getStr() {
-        return str;
+    public String getKey() {
+        return key;
     }
-    public int getValue() {
-        return value;
+    public void setData(Object d) {
+        data =d;
+    }
+    public Object getData() {
+        return data;
     } 
 }

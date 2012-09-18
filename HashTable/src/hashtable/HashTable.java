@@ -29,34 +29,32 @@ public class HashTable {
         }
         return hash % size;
     }
-    public void putElem(String s) {
-        if (s != null) {
-           int hash = hashfunc(s); List<HTElem> l;
+    public boolean put(String key, Object elem) {
+        if (key != null) {
+           int hash = hashfunc(key); List<HTElem> l;
            
            if (table.get(hash).isEmpty()) {
                 l = table.get(hash);
-                l.add(new HTElem(s, 1));
+                l.add(new HTElem(key, elem));
            } else {
                 l = table.get(hash);
-                Iterator i = l.iterator(); HTElem e; boolean f = false;
+                Iterator i = l.iterator(); HTElem e;
                 
                 while(i.hasNext()) {
                     e = (HTElem)i.next();
-                    if (s.equals(e.str)) {
-                        ++e.value;
-                        f = true;
-                        break;
+                    if (key.equals(e.key)) {
+                        return false;
                     }
                 }
-                if (!f) {
-                    l.add(new HTElem(s, 1));
-                }
+                l.add(new HTElem(key, elem));
             }
+            return true;
         }
+        return false;
     }
-    public HTElem getbyKey(String s) {
-        if (s != null) {
-           int hash = hashfunc(s); List<HTElem> l;
+    public HTElem get(String key) {
+        if (key != null) {
+           int hash = hashfunc(key); List<HTElem> l;
            
            l = table.get(hash);
            if (l.isEmpty()) {
@@ -66,7 +64,7 @@ public class HashTable {
                 
                 while(i.hasNext()) {
                     e = (HTElem)i.next();
-                    if (s.equals(e.str)) {
+                    if (key.equals(e.key)) {
                         return e;
                     }
                 }
@@ -75,9 +73,9 @@ public class HashTable {
         }
         return null;
     }
-    public void deletebyKey(String s) {
-        if (s != null) {
-           int hash = hashfunc(s); List<HTElem> l;
+    public void delete(String key) {
+        if (key != null) {
+           int hash = hashfunc(key); List<HTElem> l;
            l = table.get(hash);
            if (l.isEmpty()) {
            } else {
@@ -85,7 +83,7 @@ public class HashTable {
                 
                while(i.hasNext()) {
                     e = (HTElem)i.next();
-                    if (s.equals(e.str)) {
+                    if (key.equals(e.key)) {
                         i.remove();
                         return;
                     }
