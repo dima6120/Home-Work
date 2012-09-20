@@ -18,6 +18,4 @@ public abstract class TObject {
     protected float[] c = new float[3];
     public abstract void Show(GL gl, GLU glu);
     public abstract void Move();
-    protected abstract void GetEvent(Event e);
-    protected abstract void PutEvent(Event e);
 }

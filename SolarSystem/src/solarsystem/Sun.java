@@ -5,14 +5,12 @@
 
 package solarsystem;
 
-import java.util.Iterator;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
-import javax.media.opengl.glu.GLUquadric;
 
 public class Sun extends Group{
-    public Sun(float _x, float _y, float _r) {
-        x = _x; y = _y; r = _r; owner = null; 
+    public Sun(float _x, float _y, float _r, TObject _owner) {
+        x = _x; y = _y; r = _r; owner = _owner; 
         c[0] = 1.0f; c[1] = 1.0f; c[2] = 0.0f;
         
         GLU glu = new GLU();
@@ -30,25 +28,31 @@ public class Sun extends Group{
         
         gl.glPopMatrix();
         
-        if (!list.isEmpty()) {
-            Iterator i = list.iterator(); TObject o;
-                
-            while(i.hasNext()) {
-                o = (TObject) i.next();
-                o.Show(gl,glu);
-            }
-        }
+        super.Show(gl, glu);
     }   
 
     @Override
     public void Move() {
-        if (!list.isEmpty()) {
-            Iterator i = list.iterator(); TObject o;
-                
-            while(i.hasNext()) {
-                o = (TObject) i.next();
-                o.Move();
+        super.Move();
+    }
+    
+    @Override
+    protected void GetEvent(Event e) {
+        if (e.addr == null || e.addr == this) {         
+            switch (e.type) {
+                case vercol: 
+                    float sx = e.sender.x, 
+                          sy = e.sender.y;
+                    if (Math.sqrt(Math.pow(sx-x,2) + Math.pow(sy-y,2)
+                            ) <= r) {
+                        PutEvent(new Event(this, e.sender, TEvent.confcol));
+                    } else {   
+                        super.GetEvent(e);
+                    }
+                    break;
             }
+        } else {
+            super.GetEvent(e);
         }
     }
 }

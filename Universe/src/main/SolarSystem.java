@@ -21,15 +21,13 @@ import javax.media.opengl.glu.GLU;
 import solarsystem.*;
         
 public class SolarSystem implements GLEventListener {
-    Universe universe;
     Sun sun;
     Planet pl1;
-    Planet pl2;
-    Planet pl3;
     Planet sp1;
     Planet sp2;
+    Planet pl2;
     Planet sp3;
-    Planet sp4;
+    Planet pl3;
     int w;
     int h;
     public static void main(String[] args) {
@@ -66,38 +64,24 @@ public class SolarSystem implements GLEventListener {
         GLU glu = new GLU();
         GL gl = drawable.getGL();
         float[] c = {1.0f,0.0f,0.0f};
-        
-        universe = new Universe(20, 20);
-        
-        for(int i = 0; i < 20; i++) {
-            universe.Add(new Comet(universe));
-        }
-        
-        sun = new Sun(0.0f, 0.0f, 1.0f, universe);
-        
+        sun = new Sun(0.0f, 0.0f, 1.0f);
         pl1 = new Planet(0.2f, c, sun, 2.0f, 0.0f, 0.1f);
-        c[0] = 0.0f; c[1] = 1.0f; c[2] = 0.5f;
-        pl2 = new Planet(0.3f, c, sun, 4.0f, 182.0f, 0.2f);
         c[0] = 1.0f; c[1] = 0.0f; c[2] = 1.0f;
-        c[0] = 1.0f; c[1] = 0.0f; c[2] = 0.1f;
-        pl3 = new Planet(0.4f, c, sun, 6.0f, 100.0f, 0.2f);
-        
         sp1 = new Planet(0.06f, c, pl1, 0.3f, 0.0f, 0.4f);
         c[0] = 0.4f; c[1] = 0.3f; c[2] = 0.1f;
         sp2 = new Planet(0.03f, c, pl1, 0.5f, 135.0f, 0.2f);
+        c[0] = 0.0f; c[1] = 1.0f; c[2] = 0.5f;
+        pl2 = new Planet(0.3f, c, sun, 4.0f, 182.0f, 0.2f);
         c[0] = 0.3f; c[1] = 0.1f; c[2] = 0.2f;
         sp3 = new Planet(0.07f, c, pl2, 1.0f, 135.0f, 0.3f);
-        c[0] = 0.0f; c[1] = 0.1f; c[2] = 0.2f;
-        sp4 = new Planet(0.1f, c, pl3, 1.0f, 135.0f, 0.4f);
-        
-        universe.Add(sun);
+        c[0] = 1.0f; c[1] = 0.0f; c[2] = 0.1f;
+        pl3 = new Planet(0.4f, c, sun, 6.0f, 100.0f, 0.2f);
         sun.Add(pl2);
         sun.Add(pl1);
         sun.Add(pl3);
         pl1.Add(sp1);
         pl1.Add(sp2);
         pl2.Add(sp3);
-        pl3.Add(sp4);
 
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glShadeModel(GL.GL_SMOOTH); 
@@ -134,9 +118,8 @@ public class SolarSystem implements GLEventListener {
         gl.glPushMatrix();
         
         gl.glScalef(0.5f, 0.5f, 1.0f);
-        
-        universe.Move();
-        universe.Show(gl, glu);
+        sun.Move();
+        sun.Show(gl, glu);
         
         gl.glPopMatrix();
     }

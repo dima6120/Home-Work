@@ -5,8 +5,10 @@
 
 package solarsystem;
 
+import java.util.Iterator;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
+import javax.media.opengl.glu.GLUquadric;
 
 public class Planet extends TPlanet{
     public Planet(float _r, float[] _c, TObject _owner, float _ds, 
@@ -33,7 +35,14 @@ public class Planet extends TPlanet{
         
         gl.glPopMatrix();
         
-        super.Show(gl, glu);
+        if (!list.isEmpty()) {
+            Iterator i = list.iterator(); TObject o;
+                
+            while(i.hasNext()) {
+                o = (TObject) i.next();
+                o.Show(gl, glu);
+            }
+        }
     }
 
     @Override
@@ -42,26 +51,14 @@ public class Planet extends TPlanet{
         if (alphas >= 360.0f) {
             alphas -=360.0f; 
         }
-        super.Move();
-    }
-    
-    @Override
-    protected void GetEvent(Event e) {
-        if (e.addr == null || e.addr == this) {         
-            switch (e.type) {
-                case vercol: 
-                    float sx = e.sender.x, 
-                          sy = e.sender.y;
-                    if (Math.sqrt(Math.pow(sx-x,2) + Math.pow(sy-y,2)
-                             ) <= r) {
-                        PutEvent(new Event(this, e.sender, TEvent.confcol));
-                    } else {   
-                        super.GetEvent(e);
-                    }
-                    break;
+        if (!list.isEmpty()) {
+            Iterator i = list.iterator(); TObject o;
+                
+            while(i.hasNext()) {
+                o = (TObject) i.next();
+                o.Move();
             }
-        } else {
-            super.GetEvent(e);
         }
     }
+    
 }
