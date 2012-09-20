@@ -11,7 +11,6 @@ import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 
 public class Planet extends TPlanet{
-    GLUquadric disk;
     public Planet(float _r, float[] _c, TObject _owner, float _ds, 
             double _alphas, double _dalpha) {
         r = _r; c = _c.clone(); owner = _owner; ds = owner.r + _ds; alphas = _alphas;

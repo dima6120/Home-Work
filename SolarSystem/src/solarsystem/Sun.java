@@ -11,7 +11,6 @@ import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 
 public class Sun extends Group{
-    GLUquadric disk;
     public Sun(float _x, float _y, float _r) {
         x = _x; y = _y; r = _r; owner = null; 
         c[0] = 1.0f; c[1] = 1.0f; c[2] = 0.0f;

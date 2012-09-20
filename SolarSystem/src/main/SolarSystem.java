@@ -9,7 +9,6 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
-import javax.media.opengl.glu.GLUquadric;
 
 
 
@@ -110,7 +109,6 @@ public class SolarSystem implements GLEventListener {
         GL gl = drawable.getGL();
         GLU glu = new GLU();
         
-        // Clear the drawing area
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
         
         gl.glLoadIdentity();

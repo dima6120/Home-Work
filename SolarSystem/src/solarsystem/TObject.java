@@ -7,8 +7,10 @@ package solarsystem;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
+import javax.media.opengl.glu.GLUquadric;
 
 public abstract class TObject {
+    protected GLUquadric disk;
     protected TObject owner;
     protected float x;
     protected float y;
