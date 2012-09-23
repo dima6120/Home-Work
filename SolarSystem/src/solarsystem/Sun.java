@@ -38,15 +38,21 @@ public class Sun extends Group{
     
     @Override
     protected void GetEvent(Event e) {
-        if (e.addr == null || e.addr == this) {         
+        if ((e.addr == null || e.addr == this) && e.sender != this){         
             switch (e.type) {
                 case vercol: 
-                    float sx = e.sender.x, 
-                          sy = e.sender.y;
+                    float sx = e.sender.x, sy = e.sender.y,
+                          dx = ((Comet)e.sender).dx,
+                          dy = ((Comet)e.sender).dy;
                     if (Math.sqrt(Math.pow(sx-x,2) + Math.pow(sy-y,2)
-                            ) <= r) {
+                            ) <= r + 0.03) {
                         PutEvent(new Event(this, e.sender, TEvent.confcol));
                     } else {   
+                        if (Math.sqrt(Math.pow(sx-x+dx,2) + Math.pow(sy-y+dy,2)
+                             ) <= r + 0.02)
+                        {
+                            PutEvent(new Event(this, e.sender, TEvent.confcol));
+                        }
                         super.GetEvent(e);
                     }
                     break;

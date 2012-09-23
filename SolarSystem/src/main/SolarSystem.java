@@ -2,6 +2,8 @@ package main;
 
 import com.sun.opengl.util.Animator;
 import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.media.opengl.GL;
@@ -9,29 +11,29 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
-
-
-
-/**
- * SolarSystem.java <BR>
- * author: Brian Paul (converted to Java by Ron Cemer and Sven Goethel) <P>
- *
- * This version is equal to Brian Paul's version 1.2 1999/10/21
- */
+import javax.swing.Timer;
 import solarsystem.*;
         
 public class SolarSystem implements GLEventListener {
-    Universe universe;
-    Sun sun;
-    Planet pl1;
-    Planet pl2;
-    Planet pl3;
-    Planet sp1;
-    Planet sp2;
-    Planet sp3;
-    Planet sp4;
-    int w;
-    int h;
+    private Universe universe;
+    private Sun sun;
+    private Planet pl1;
+    private Planet pl2;
+    private Planet pl3;
+    private Planet sp1;
+    private Planet sp2;
+    private Planet sp3;
+    private Planet sp4;
+    private int w;
+    private int h;
+    private GLU glu = new GLU();
+    private Timer timer=new Timer(10,new ActionListener(
+    ) {
+        public void actionPerformed(ActionEvent ae) {
+            universe.Move();
+        }
+    });
+    
     public static void main(String[] args) {
         Frame frame = new Frame("SolarSystem");
         GLCanvas canvas = new GLCanvas();
@@ -41,7 +43,7 @@ public class SolarSystem implements GLEventListener {
         frame.setSize(640, 480);
         final Animator animator = new Animator(canvas);
         frame.addWindowListener(new WindowAdapter() {
-
+           
             @Override
             public void windowClosing(WindowEvent e) {
                 // Run this on another thread than the AWT event queue to
@@ -63,8 +65,8 @@ public class SolarSystem implements GLEventListener {
     }
 
     public void init(GLAutoDrawable drawable) {
-        GLU glu = new GLU();
         GL gl = drawable.getGL();
+        
         float[] c = {1.0f,0.0f,0.0f};
         
         universe = new Universe(20, 20);
@@ -98,15 +100,14 @@ public class SolarSystem implements GLEventListener {
         pl1.Add(sp2);
         pl2.Add(sp3);
         pl3.Add(sp4);
-
+        timer.start();
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glShadeModel(GL.GL_SMOOTH); 
     }
 
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
         GL gl = drawable.getGL();
-        GLU glu = new GLU();
-
+        
         if (height <= 0) { // avoid a divide by zero error!
         
             height = 1;
@@ -121,9 +122,8 @@ public class SolarSystem implements GLEventListener {
         gl.glLoadIdentity();
     }
 
-    public void display(GLAutoDrawable drawable) {
+    public void display(GLAutoDrawable drawable) {       
         GL gl = drawable.getGL();
-        GLU glu = new GLU();
         
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
         
@@ -134,8 +134,7 @@ public class SolarSystem implements GLEventListener {
         gl.glPushMatrix();
         
         gl.glScalef(0.5f, 0.5f, 1.0f);
-        
-        universe.Move();
+  
         universe.Show(gl, glu);
         
         gl.glPopMatrix();

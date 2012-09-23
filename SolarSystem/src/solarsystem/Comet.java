@@ -9,8 +9,8 @@ import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 public class Comet extends TObject{
-    private float dx = (float)Math.random()/10;
-    private float dy = (float)Math.random()/10;
+    protected float dx = 0.001f + (float)Math.random()/15;
+    protected float dy = 0.001f + (float)Math.random()/15;
     public Comet(Universe _owner) {
         owner = _owner; r = 0.04f; 
         
@@ -43,6 +43,8 @@ public class Comet extends TObject{
     @Override
     public void Move() {
         float bx = ((Universe)owner).bx, by = ((Universe)owner).by;
+         
+        PutEvent(new Event(this, null, TEvent.vercol));
         
         if (x+dx >= bx || x+dx <= -bx) {
             dx = -dx; x += dx;
@@ -55,25 +57,30 @@ public class Comet extends TObject{
         } else {
             y += dy;
         }
-        
-        PutEvent(new Event(this, null, TEvent.vercol));
     }
 
     @Override
     protected void GetEvent(Event e) {
-        if (e.addr == null || e.addr == this) {         
+        if ((e.addr == null || e.addr == this) && e.sender != this) {         
             switch (e.type) {
                 case confcol: 
                     x -= dx; y -= dy;
                     float a = e.sender.y - y - dy;
                     float b = x - e.sender.x + dx;
-
+                    
                     dx = (float) (((Math.pow(a,2) - Math.pow(b,2)) * dx + 
                                      2*a*b*dy)/(Math.pow(a,2) + Math.pow(b,2)));
 
                     dy = (float) ((-((Math.pow(a,2) - Math.pow(b,2)) * dy) + 
                                      2*a*b*dx)/(Math.pow(a,2) + Math.pow(b,2)));
                     break;
+               /*case vercol: 
+                    float sx = e.sender.x, 
+                          sy = e.sender.y;
+                    if (Math.sqrt(Math.pow(sx-x,2) + Math.pow(sy-y,2)
+                            ) <= r + 0.02) {
+                        PutEvent(new Event(this, e.sender, TEvent.confcol));
+                    }*/
             }
         }
     }
