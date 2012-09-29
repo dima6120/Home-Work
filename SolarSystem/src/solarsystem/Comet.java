@@ -9,8 +9,8 @@ import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 public class Comet extends TObject{
-    protected float dx = 0.001f + (float)Math.random()/15;
-    protected float dy = 0.001f + (float)Math.random()/15;
+    protected float dx = 0.01f + (float)Math.random()/15;
+    protected float dy = 0.01f + (float)Math.random()/15;
     public Comet(Universe _owner) {
         owner = _owner; r = 0.04f; 
         

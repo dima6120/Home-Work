@@ -19,7 +19,7 @@ public class HashTable {
             table.add(new ArrayList<HTElem>());
         }
     }
-    int hashfunc(String s) {
+    private int hashfunc(String s) {
         //djb2
         long hash = 5381;
         int len = s.length();

@@ -22,7 +22,7 @@ public class Planet extends TPlanet{
 
     @Override
     public void Show(GL gl,GLU glu) {
-        x = (float) (owner.x + ds*Math.cos(alphas*Math.PI/180));
+        x = (float) (owner.x + 1.3*ds*Math.cos(alphas*Math.PI/180));
         y = (float) (owner.y - ds*Math.sin(alphas*Math.PI/180));
       
         gl.glPushMatrix();
