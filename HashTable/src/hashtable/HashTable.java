@@ -8,6 +8,7 @@ package hashtable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import static strcount.Print.*;
 
 public class HashTable {
     private int size;
@@ -18,6 +19,39 @@ public class HashTable {
         for (int i = 0; i < size; i++) {
             table.add(new ArrayList<HTElem>());
         }
+    }
+    public void provdistr() {
+        int min = -1, max = 0, av = 0, n = 0;
+        double stdev = 0.0f, vdev = 0.0f;
+        List<Integer> dev = new ArrayList<>(size);
+        
+        for(List<HTElem> l : table) {
+            for(HTElem e : l) {
+                n++; av++;
+            }
+            dev.add(n);
+            if (n > max) {
+                max = n;
+            }
+            if (min == -1) {
+                min = n; 
+            } else {
+                if (n < min) {
+                    min = n;
+                }
+            }
+            n = 0;
+        }
+        for(Integer i : dev) {
+            vdev += i - av/size; 
+            stdev += (i - av/size)^2;
+        }
+        stdev = (float) Math.sqrt(stdev/size);
+        print("min:" + Integer.toString(min), true);
+        print("max:" + Integer.toString(max), true);
+        print("average:" + Float.toString(av/size), true);
+        print("average dev:" + Double.toString(vdev/size), true);
+        print("standart dev:" + Double.toString(stdev), true);
     }
     private int hashfunc(String s) {
         //djb2
@@ -88,6 +122,11 @@ public class HashTable {
                     }
                 }
            }
+        }
+    }
+    public void clear() {
+        if (!table.isEmpty()) {
+            table.clear();
         }
     }
 }

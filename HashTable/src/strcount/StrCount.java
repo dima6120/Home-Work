@@ -18,8 +18,8 @@ public class StrCount {
     public StrCount(int size) {
         ht = new HashTable(size);
     }
-    public void clearAll(int size) {
-        ht = new HashTable(size);
+    public void clear(int size) {
+        ht.clear();
     }
     public int getNumber() {
         return words;
@@ -80,5 +80,8 @@ public class StrCount {
     }
     public void delete(String s) {
         ht.delete(s);
+    }
+    public void showdistr() {
+        ht.provdistr();
     }
 }
