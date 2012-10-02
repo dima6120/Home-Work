@@ -83,9 +83,9 @@ public class CheckBraces {
         p = Pattern.compile(opxmlbr);
         m = p.matcher(str); 
         if (m.matches()) {
-            if (!MatchingEBXML()) {
-                s.push(new StackElem(ElemType.xmlobrace, getName(str)));
-            }
+            if (!MatchingOCBXML()) {
+                    s.push(new StackElem(ElemType.xmlobrace, getName(str)));
+            } 
             return true;
         } else {
             return false;
@@ -142,9 +142,11 @@ public class CheckBraces {
         
     public boolean testBraces(String seq) {
         if (seq != null) {
+            s.ClearStack(); lb = ElemType.nothing;
+            tb = false; str = "";
             return analize(seq);
         } else {
-            return true; 
+            return false; 
         }
     }
 }

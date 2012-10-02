@@ -10,7 +10,10 @@ public class CountWays {
     private int fy;
     private int numb;
     
-    public int getNumbWays(int x, int y) {
+    public int getNumbWays(int x, int y) throws ArgumentException {
+        if (x < 0 || y < 0) {
+            throw new ArgumentException("отрицательные числа!");
+        }
         fx = x; fy = y; numb = 0;
         count(0, 0);
         return numb;

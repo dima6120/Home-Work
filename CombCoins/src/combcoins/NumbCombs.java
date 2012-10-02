@@ -9,14 +9,20 @@ public class NumbCombs {
     private int []c;
     private int len;
     
-    public NumbCombs(int []c) {
+    public NumbCombs(int []c) throws ArgumentException {
+        if (c == null) {
+            throw new ArgumentException("wrong set");
+        }
         this.c = c.clone();
         len = c.length;
     }
-    public int getNumbs(int n) {
-        return numbcombs(n, 0);
+    public int getNumbs(int n) throws ArgumentException {
+        if (n < 0) {
+            throw new ArgumentException("negate value");
+        }
+        return n == 0 ? 0 : numbcombs(n, 0);
     }
-    public int numbcombs(int n, int head) {
+    int numbcombs(int n, int head) {
         if (n == 0) {
             return 1;
         }

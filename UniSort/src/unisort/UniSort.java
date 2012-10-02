@@ -45,7 +45,9 @@ public class UniSort {
         }
     }
     public void sort(Object []m, Compare c) {
-       this.c = c;
-       QuickSortMass(m, 0, m.length - 1);
+        if (c != null && m != null) {
+            this.c = c;
+            QuickSortMass(m, 0, m.length - 1);
+        }
     }
 }

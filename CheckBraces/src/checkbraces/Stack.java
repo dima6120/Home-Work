@@ -26,6 +26,11 @@ public class Stack {
             return null;
         }
     }
+    public void ClearStack() {
+        if (!isEmpty()) {
+            list.clear();
+        }
+    }
     public boolean isEmpty() {
         return list.isEmpty();
     } 
