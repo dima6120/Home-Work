@@ -1,15 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ways;
 
-import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  *
- * @author Xiao-Mei
+ * @author dima6120
  */
 public class CountWaysTest {
     
@@ -20,7 +16,7 @@ public class CountWaysTest {
      * Test of getNumbWays method, of class CountWays.
      */
     @Test
-    public void DefPoint() throws Exception {
+    public void DefPoint() throws ArgException {
         System.out.println("DefPoint");
         int x = 2;
         int y = 3;
@@ -29,8 +25,8 @@ public class CountWaysTest {
         int result = instance.getNumbWays(x, y);
         assertEquals(expResult, result);
     }
-    @Test(expected = ArgumentException.class)
-    public void NegPoint() throws Exception {
+    @Test(expected = ArgException.class)
+    public void NegPoint() throws ArgException {
         System.out.println("ZeroZero");
         int x = -1;
         int y = 0;

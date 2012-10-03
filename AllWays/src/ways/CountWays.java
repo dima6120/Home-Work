@@ -10,13 +10,14 @@ public class CountWays {
     private int fy;
     private int numb;
     
-    public int getNumbWays(int x, int y) throws ArgumentException {
+    public int getNumbWays(int x, int y) throws ArgException {
         if (x < 0 || y < 0) {
-            throw new ArgumentException("отрицательные числа!");
+            throw new ArgException();
         }
         fx = x; fy = y; numb = 0;
         count(0, 0);
         return numb;
+        
     }
     //да да да...я знаю про биномиальные коэфиценты и треугольник Паскаля...
     //но так же не интересно :)
