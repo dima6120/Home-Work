@@ -1,4 +1,5 @@
 /**
+ * Копытов Дмитрий Сергеевич, (с) 2012 год 
  * Group
  * @author dima6120
  */
@@ -6,7 +7,6 @@
 package solarsystem;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
@@ -23,10 +23,7 @@ public class Group extends TObject {
     @Override
     public void Show(GL gl, GLU glu) {
         if (!list.isEmpty()) {
-            Iterator i = list.iterator(); TObject o;
-                
-            while(i.hasNext()) {
-                o = (TObject) i.next();
+            for (TObject o : list) {
                 o.Show(gl,glu);
             }
         }
@@ -35,10 +32,7 @@ public class Group extends TObject {
     @Override
     public void Move() {
         if (!list.isEmpty()) {
-            Iterator i = list.iterator(); TObject o;
-                
-            while(i.hasNext()) {
-                o = (TObject) i.next();
+            for (TObject o : list) {
                 o.Move();
             }
         }
@@ -47,10 +41,7 @@ public class Group extends TObject {
     @Override
     protected void GetEvent(Event e) {
         if (!list.isEmpty()) {
-            Iterator i = list.iterator(); TObject o;
-                
-            while(i.hasNext()) {
-                o = (TObject) i.next();
+            for (TObject o : list) {
                 o.GetEvent(e);
             }
         }

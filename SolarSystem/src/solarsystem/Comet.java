@@ -1,4 +1,5 @@
 /**
+ *  опытов ƒмитрий —ергеевич, (с) 2012 год 
  * Comet
  * @author dima6120
  */
@@ -9,8 +10,8 @@ import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 public class Comet extends TObject{
-    protected float dx = 0.01f + (float)Math.random()/15;
-    protected float dy = 0.01f + (float)Math.random()/15;
+    protected float dx = 0.01f + (float)Math.random()/15; // вектор скорости
+    protected float dy = 0.01f + (float)Math.random()/15; //
     public Comet(Universe _owner) {
         owner = _owner; r = 0.04f; 
         
@@ -67,14 +68,16 @@ public class Comet extends TObject{
                     x -= dx; y -= dy;
                     float a = e.sender.y - y - dy;
                     float b = x - e.sender.x + dx;
-                    
+                    //измен€ем направление кометы
                     dx = (float) (((Math.pow(a,2) - Math.pow(b,2)) * dx + 
                                      2*a*b*dy)/(Math.pow(a,2) + Math.pow(b,2)));
 
                     dy = (float) ((-((Math.pow(a,2) - Math.pow(b,2)) * dy) + 
                                      2*a*b*dx)/(Math.pow(a,2) + Math.pow(b,2)));
                     break;
-               /*case vercol: 
+                /* дл€ проверки столкновени€ с кометами, но тормоза сильные,
+                   поэтому выпилил
+                case vercol: 
                     float sx = e.sender.x, 
                           sy = e.sender.y;
                     if (Math.sqrt(Math.pow(sx-x,2) + Math.pow(sy-y,2)

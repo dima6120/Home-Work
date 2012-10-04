@@ -1,24 +1,17 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package unisort;
 
-import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
- *
- * @author Xiao-Mei
+ * Копытов Дмитрий Сергеевич, (с) 2012 год
+ * @author dima6120
  */
 public class UniSortTest {
     
     public UniSortTest() {
     }
 
-    /**
-     * Test of sort method, of class UniSort.
-     */
     @Test
     public void NullListSort() {
         System.out.println("NullListSort");

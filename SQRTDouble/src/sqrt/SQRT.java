@@ -1,4 +1,5 @@
 /**
+ * Копытов Дмитрий Сергеевич, (с) 2012 год
  * SQRT
  * @author dima6120
  */
@@ -6,7 +7,7 @@
 package sqrt;
 
 public class SQRT {
-    //Newton's Iteration
+    //Итарационный метод Ньютона
     public static double sqrt(double d) {
         double x = d/2, px;
         do

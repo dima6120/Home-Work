@@ -1,3 +1,9 @@
+/**
+ * Копытов Дмитрий Сергеевич, (с) 2012 год 
+ * SolarSystem
+ * @author dima6120
+ */
+
 package main;
 
 import com.sun.opengl.util.Animator;
