@@ -1,9 +1,10 @@
-package main;
-
 /**
+ * Копытов Дмитрий Сергеевич, (с) 2012 год 
  * Main
  * @author dima6120
  */
+
+package main;
 
 import checkbraces.CheckBraces;
 import java.io.BufferedReader;

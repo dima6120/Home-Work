@@ -1,4 +1,5 @@
 /**
+ * Копытов Дмитрий Сергеевич, (с) 2012 год
  * CaseSensetivePalindrome
  * @author dima6120
  */

@@ -1,4 +1,5 @@
 /**
+ * Копытов Дмитрий Сергеевич, (с) 2012 год 
  * CheckBraces
  * @author dima6120
  */
@@ -12,15 +13,22 @@ import java.util.regex.Pattern;
 public class CheckBraces {
     private Pattern p;
     private Matcher m;
+    //regexp для открывающей XML'ой скобки
     private final String opxmlbr = "\\<[a-zA-z]+(([ ]{0,})|([ ]+.+))\\>";
+    //regexp для одиночной XML'ой скобки
     private final String ocxmlbr ="\\<[a-zA-z]+[ ]{0,}\\/\\>";
+    //regexp для закрывающей XML'ой скобки
     private final String clxmlbr = "\\<\\/[a-zA-z]+\\>";
-    private Stack s;
+    private Stack s; 
+    //текущий символ: <,(,[ или nothing
     private ElemType lb = ElemType.nothing;
+    //был <
     private boolean tb = false;
+    //последний важный символ
     private String lc;
+    //строка для составления XML'ой скобки
     private String str = new String();
-    
+    //тест на открывающую скобку
     boolean isOpenBracket(char c) {
         switch (c) {
             case '(': lb = ElemType.robrace; lc = "("; return true;
@@ -32,6 +40,7 @@ public class CheckBraces {
             default: lb = ElemType.nothing; return false;
         }
     }
+    //получить пару открывающей скобке
     char getPair(char bracket) {
         switch(bracket) {
                 case '(' : return ')';
@@ -39,10 +48,11 @@ public class CheckBraces {
         }
         return 0;
     }
- 
+    //тест на закрывающую скобку
     boolean isCloseBracket(char ch) {
         return ch == getPair('(')|| ch == getPair('[');
     }
+    //получаем имя XML'ой скобки
     String getName(String s) {
         String r = "";
         for(char c : s.toCharArray()) {
@@ -55,10 +65,12 @@ public class CheckBraces {
         }
         return r;
     }
+    //тест на соответствие одной из XML'ых скобок
     boolean Matching() {
-        return MatchingOBXML() || MatchingEBXML() || MatchingOCBXML();
+        return MatchingOBXML() || MatchingСBXML() || MatchingOCBXML();
     }
-    boolean MatchingEBXML() {
+    //тест на закрывающую XML'ую скобку
+    boolean MatchingСBXML() {
         p = Pattern.compile(clxmlbr);
         m = p.matcher(str); 
         if (m.matches()) {
@@ -79,11 +91,15 @@ public class CheckBraces {
         }
                 
     }
+    //тест на открывающую XML'ую скобку
     boolean MatchingOBXML() {
         p = Pattern.compile(opxmlbr);
         m = p.matcher(str); 
         if (m.matches()) {
+            //возможна путаница одиночной и открывающей скобки.
+            //поэтому уточним какая же всё-таки это скобка
             if (!MatchingOCBXML()) {
+                    //все-таки открывающая
                     s.push(new StackElem(ElemType.xmlobrace, getName(str)));
             } 
             return true;
@@ -91,6 +107,7 @@ public class CheckBraces {
             return false;
         }
     }
+    //тест на одиночную XML'ую скобку
     boolean MatchingOCBXML() {
         p = Pattern.compile(ocxmlbr);
         m = p.matcher(str); 
@@ -102,23 +119,29 @@ public class CheckBraces {
     boolean analize(String seq) {
         for (char c : seq.toCharArray()) {
             if (tb) {
+                //собираем XML'ю скобку
                 if (c == '>') {
                     str += '>'; tb = false;
+                    //тестируем претендента на XML'ю скобку
                     if (!Matching()) {
                         return false;
                     }
                     str = "";
                 } else {
+                    //собираем...
                     str += c;
                 }
                 continue;
             }
             if (isOpenBracket(c)) {
+                //попалась одна из скобок: (,[,<
                 if (lb != ElemType.tobrace) {
+                    //если не <, то сразу в стек
                     s.push(new StackElem(lb, lc));
                 }
             }
             if (isCloseBracket(c)) {
+                //попалась одна из скобок: ),]
                 if (s.isEmpty()) {
                     return false;
                 } else {

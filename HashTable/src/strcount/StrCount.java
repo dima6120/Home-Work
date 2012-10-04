@@ -1,4 +1,5 @@
 /**
+ * Копытов Дмитрий Сергеевич, (с) 2012 год
  * StrCount
  * @author dima6120
  */ 
@@ -13,7 +14,7 @@ import java.io.IOException;
 
 public class StrCount {
     private HashTable ht;
-    private int words = 0;
+    private int words = 0; //всего слов
     
     public StrCount(int size) {
         ht = new HashTable(size);
@@ -49,6 +50,7 @@ public class StrCount {
             return 0;
         }
     }
+    //считать все слова из файла
     public void ReadFromFile(String s) {
         try {
             try (BufferedReader f = new BufferedReader(new FileReader(s))) {
@@ -81,6 +83,7 @@ public class StrCount {
     public void delete(String s) {
         ht.delete(s);
     }
+    //показать статистику
     public void showdistr() {
         ht.provdistr();
     }

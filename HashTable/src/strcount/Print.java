@@ -1,10 +1,12 @@
-/*
+/**
+ * Копытов Дмитрий Сергеевич, (с) 2012 год 
  * Print
  * @author dima6120
- */ 
+ */
 
 package strcount;
 
+//для удобства вывода текста
 public class Print {
     public static void append(char x) {
         System.out.append(x);

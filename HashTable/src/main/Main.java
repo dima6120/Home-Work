@@ -1,7 +1,10 @@
 /**
+ * Копытов Дмитрий Сергеевич, (с) 2012 год 
  * Main
  * @author dima6120
  */
+
+package main;
 
 import strcount.*;
 import static strcount.Print.*;

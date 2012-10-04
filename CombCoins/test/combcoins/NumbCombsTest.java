@@ -1,24 +1,17 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package combcoins;
 
-import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
- *
- * @author Xiao-Mei
+ * Копытов Дмитрий Сергеевич, (с) 2012 год 
+ * @author dima6120
  */
 public class NumbCombsTest {
     
     public NumbCombsTest() {
     }
 
-    /**
-     * Test of getNumbs method, of class NumbCombs.
-     */
     @Test(expected = ArgumentException.class)
     public void NullSet() throws ArgumentException {
         System.out.println("Null Set");

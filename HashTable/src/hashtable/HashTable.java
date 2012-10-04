@@ -1,4 +1,5 @@
 /**
+ * Копытов Дмитрий Сергеевич, (с) 2012 год
  * HashTable
  * @author dima6120
  */ 
@@ -20,6 +21,7 @@ public class HashTable {
             table.add(new ArrayList<HTElem>());
         }
     }
+    //собираем статистику
     public void provdistr() {
         int min = -1, max = 0, av = 0, n = 0;
         double stdev = 0.0f, vdev = 0.0f;
@@ -53,8 +55,12 @@ public class HashTable {
         print("average dev:" + Double.toString(vdev/size), true);
         print("standart dev:" + Double.toString(stdev), true);
     }
+    /* djb2, как было сказано хеш-функция с превосходным распределением 
+     * и скоростью
+     * http://www.cse.yorku.ca/~oz/hash.html
+    */
     private int hashfunc(String s) {
-        //djb2
+        
         long hash = 5381;
         int len = s.length();
         for(int i = 0; i < len; i++) {
