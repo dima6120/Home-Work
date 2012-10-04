@@ -5,6 +5,7 @@
 
 package checkbraces;
 
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,7 +15,7 @@ public class CheckBraces {
     private final String opxmlbr = "\\<[a-zA-z]+(([ ]{0,})|([ ]+.+))\\>";
     private final String ocxmlbr ="\\<[a-zA-z]+[ ]{0,}\\/\\>";
     private final String clxmlbr = "\\<\\/[a-zA-z]+\\>";
-    private Stack s = new Stack();
+    private Stack s;
     private ElemType lb = ElemType.nothing;
     private boolean tb = false;
     private String lc;
@@ -43,14 +44,13 @@ public class CheckBraces {
         return ch == getPair('(')|| ch == getPair('[');
     }
     String getName(String s) {
-        String r = ""; int len = s.length(); char c;
-        for(int i = 0; i < len; i++) {
-            c = s.charAt(i);
+        String r = "";
+        for(char c : s.toCharArray()) {
             if (c == ' ') {
                 break;
             }
             if (c != '<' && c != '>' && c != '/') {
-              r += s.charAt(i);
+              r += c;
             }
         }
         return r;
@@ -65,7 +65,7 @@ public class CheckBraces {
            if (s.isEmpty()) {
                return false;
            }
-           StackElem e = s.pop();
+           StackElem e = (StackElem) (s.pop());
            if (e.type != ElemType.xmlobrace) {
                return false;
            } else {
@@ -100,37 +100,35 @@ public class CheckBraces {
         return true;
     }
     boolean analize(String seq) {
-        int len = seq.length();
-        
-        for(int i = 0; i < len; i++) {
+        for (char c : seq.toCharArray()) {
             if (tb) {
-                if (seq.charAt(i) == '>') {
+                if (c == '>') {
                     str += '>'; tb = false;
                     if (!Matching()) {
                         return false;
                     }
                     str = "";
                 } else {
-                    str += seq.charAt(i);
+                    str += c;
                 }
                 continue;
             }
-            if (isOpenBracket(seq.charAt(i))) {
+            if (isOpenBracket(c)) {
                 if (lb != ElemType.tobrace) {
                     s.push(new StackElem(lb, lc));
                 }
             }
-            if (isCloseBracket(seq.charAt(i))) {
+            if (isCloseBracket(c)) {
                 if (s.isEmpty()) {
                     return false;
                 } else {
-                    StackElem e = s.pop();
+                    StackElem e = (StackElem) s.pop();
                     if (e.type == ElemType.xmlobrace) {
                         return false;
                     }
                     char ch = e.name.charAt(0);
                     
-                    if (getPair(ch) != seq.charAt(i)) {
+                    if (getPair(ch) != c) {
                         return false;
                     }
                 }
@@ -142,7 +140,7 @@ public class CheckBraces {
         
     public boolean testBraces(String seq) {
         if (seq != null) {
-            s.ClearStack(); lb = ElemType.nothing;
+            s = new Stack(); lb = ElemType.nothing;
             tb = false; str = "";
             return analize(seq);
         } else {

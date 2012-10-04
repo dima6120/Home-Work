@@ -72,10 +72,7 @@ public class HashTable {
                 l.add(new HTElem(key, elem));
            } else {
                 l = table.get(hash);
-                Iterator i = l.iterator(); HTElem e;
-                
-                while(i.hasNext()) {
-                    e = (HTElem)i.next();
+                for(HTElem e : l) {
                     if (key.equals(e.key)) {
                         return false;
                     }
@@ -94,10 +91,7 @@ public class HashTable {
            if (l.isEmpty()) {
                return null;
            } else {
-               Iterator i = l.iterator(); HTElem e;
-                
-                while(i.hasNext()) {
-                    e = (HTElem)i.next();
+               for(HTElem e : l) {
                     if (key.equals(e.key)) {
                         return e;
                     }
