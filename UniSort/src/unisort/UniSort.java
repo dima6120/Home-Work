@@ -8,13 +8,14 @@ package unisort;
 
 public class UniSort {
     private Compare c;
-    void swap(Object []m, int a, int b)
+    
+    private void swap(Object []m, int a, int b)
     {
         Object c = m[a];
         m[a] = m[b];
         m[b] = c;
     }
-    void QuickSortMass(Object []m, int min, int max)
+    private void quicksort(Object []m, int min, int max)
     {
         Object x = m[min + (max - min)/2];
         int l = min;
@@ -39,16 +40,16 @@ public class UniSort {
         while (l < r);
 
         if (r > min) {
-            QuickSortMass(m, min, r);
+            quicksort(m, min, r);
         }
         if (l < max) {        
-            QuickSortMass(m,l,max);                             
+            quicksort(m,l,max);                             
         }
     }
     public void sort(Object []m, Compare c) {
         if (c != null && m != null) {
             this.c = c;
-            QuickSortMass(m, 0, m.length - 1);
+            quicksort(m, 0, m.length - 1);
         }
     }
 }

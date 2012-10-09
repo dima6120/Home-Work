@@ -28,28 +28,33 @@ public class CheckBraces {
     private String lc;
     //строка для составления XML'ой скобки
     private String str = new String();
+    
     //тест на открывающую скобку
-    boolean isOpenBracket(char c) {
+    private boolean isOpenBracket(char c) {
         switch (c) {
-            case '(': lb = ElemType.robrace; lc = "("; return true;
-            case '[': lb = ElemType.sobrace; lc = "["; return true;
+            case '(': 
+                lb = ElemType.robrace; 
+                lc = "("; 
+                return true;
+            case '[': 
+                lb = ElemType.sobrace; 
+                lc = "["; 
+                return true;
             case '<': 
                 lb = ElemType.tobrace; lc = "<"; 
                 str += '<'; tb = true;
                 return true;
-            default: lb = ElemType.nothing; return false;
+            default: 
+                lb = ElemType.nothing; 
+                return false;
         }
     }
     //получить пару открывающей скобке
-    char getPair(char bracket) {
-        switch(bracket) {
-                case '(' : return ')';
-                case '[' : return ']';
-        }
-        return 0;
+    private char getPair(char bracket) {
+        return (bracket == '(') ? ')' : (bracket == '[') ? ']' : 0; 
     }
     //тест на закрывающую скобку
-    boolean isCloseBracket(char ch) {
+    private boolean isCloseBracket(char ch) {
         return ch == getPair('(')|| ch == getPair('[');
     }
     //получаем имя XML'ой скобки
@@ -60,17 +65,17 @@ public class CheckBraces {
                 break;
             }
             if (c != '<' && c != '>' && c != '/') {
-              r += c;
+                r += c;
             }
         }
         return r;
     }
     //тест на соответствие одной из XML'ых скобок
-    boolean Matching() {
-        return MatchingOBXML() || MatchingСBXML() || MatchingOCBXML();
+    private boolean matching() {
+        return matchingOBXML() || matchingСBXML() || matchingOCBXML();
     }
     //тест на закрывающую XML'ую скобку
-    boolean MatchingСBXML() {
+    private boolean matchingСBXML() {
         p = Pattern.compile(clxmlbr);
         m = p.matcher(str); 
         if (m.matches()) {
@@ -92,13 +97,13 @@ public class CheckBraces {
                 
     }
     //тест на открывающую XML'ую скобку
-    boolean MatchingOBXML() {
+    private boolean matchingOBXML() {
         p = Pattern.compile(opxmlbr);
         m = p.matcher(str); 
         if (m.matches()) {
             //возможна путаница одиночной и открывающей скобки.
             //поэтому уточним какая же всё-таки это скобка
-            if (!MatchingOCBXML()) {
+            if (!matchingOCBXML()) {
                     //все-таки открывающая
                     s.push(new StackElem(ElemType.xmlobrace, getName(str)));
             } 
@@ -108,7 +113,7 @@ public class CheckBraces {
         }
     }
     //тест на одиночную XML'ую скобку
-    boolean MatchingOCBXML() {
+    private boolean matchingOCBXML() {
         p = Pattern.compile(ocxmlbr);
         m = p.matcher(str); 
         if (!m.matches()) {
@@ -116,14 +121,15 @@ public class CheckBraces {
         }
         return true;
     }
-    boolean analize(String seq) {
+    private boolean analize(String seq) {
         for (char c : seq.toCharArray()) {
             if (tb) {
                 //собираем XML'ю скобку
                 if (c == '>') {
-                    str += '>'; tb = false;
+                    str += '>'; 
+                    tb = false;
                     //тестируем претендента на XML'ю скобку
-                    if (!Matching()) {
+                    if (!matching()) {
                         return false;
                     }
                     str = "";
@@ -163,8 +169,10 @@ public class CheckBraces {
         
     public boolean testBraces(String seq) {
         if (seq != null) {
-            s = new Stack(); lb = ElemType.nothing;
-            tb = false; str = "";
+            s = new Stack(); 
+            lb = ElemType.nothing;
+            tb = false; 
+            str = "";
             return analize(seq);
         } else {
             return false; 

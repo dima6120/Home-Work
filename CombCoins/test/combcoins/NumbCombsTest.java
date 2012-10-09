@@ -40,9 +40,9 @@ public class NumbCombsTest {
     public void UsualValue() throws ArgumentException {
         System.out.println("Usual Value");
         int []c = {1,2,5,10,20,50};
-        int n = 100;
+        int n = 5;
         NumbCombs instance = new NumbCombs(c);
-        int expResult = 4562;
+        int expResult = 4;
         int result = instance.getNumbs(n);
         assertEquals(expResult, result);
     }

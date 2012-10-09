@@ -37,7 +37,7 @@ public class NumbCombs {
      * q n ks = q n (tail ks) + q (n - (head ks)) ks
      * собственно ниже, токо на Java
      */
-    int numbcombs(int n, int head) {
+    private int numbcombs(int n, int head) {
         if (n == 0) {
             return 1;
         }

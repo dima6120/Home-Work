@@ -107,6 +107,21 @@ public class HashTable {
         }
         return null;
     }
+    public boolean ishere(String key) {
+        if (key != null) {
+            int hash = hashfunc(key); List<HTElem> l;
+           
+            l = table.get(hash);
+            if (!l.isEmpty()) {
+                for(HTElem e : l) {
+                     if (key.equals(e.key)) {
+                         return true;
+                     }
+                 }
+            }
+        }
+        return false;
+    }
     public void delete(String key) {
         if (key != null) {
            int hash = hashfunc(key); List<HTElem> l;
