@@ -58,7 +58,7 @@ public class CheckBraces {
         return ch == getPair('(')|| ch == getPair('[');
     }
     //получаем имя XML'ой скобки
-    String getName(String s) {
+    private String getName(String s) {
         String r = "";
         for(char c : s.toCharArray()) {
             if (c == ' ') {
@@ -116,10 +116,7 @@ public class CheckBraces {
     private boolean matchingOCBXML() {
         p = Pattern.compile(ocxmlbr);
         m = p.matcher(str); 
-        if (!m.matches()) {
-            return false;
-        }
-        return true;
+        return m.matches();
     }
     private boolean analize(String seq) {
         for (char c : seq.toCharArray()) {
@@ -164,7 +161,7 @@ public class CheckBraces {
             }
         }
         
-        return (!s.isEmpty() || tb) ? false : true;
+        return (s.isEmpty() && !tb);
     }
         
     public boolean testBraces(String seq) {
