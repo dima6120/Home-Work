@@ -44,7 +44,7 @@ public class Calculator {
         }
         nextlex();
         int n = expr();
-        if (curlex == Lexem.ERR) {
+        if (curlex != Lexem.NOTHING) {
             if (newvar) {
                 vars.delete(name);
             }
@@ -74,8 +74,7 @@ public class Calculator {
         return null;
     }
     private int expr() {
-        int value = term(), res;
-        res = value;
+        int res = term();
         while(true) {
             switch(curlex) {
                 case PLUS:
@@ -92,8 +91,7 @@ public class Calculator {
         }
     }
     private int term() {
-        int value = factor(), res;
-        res = value;
+        int res = factor();
         while(true) {
             switch(curlex) {
                 case MULT:
@@ -102,19 +100,19 @@ public class Calculator {
                     break;
                 case DIV:    
                     nextlex();
-                    value = factor();
+                    int value = factor();
                     if (value == 0) {
                         curlex = Lexem.ERR;
-                    } else {
-                        res /= value;
-                    }
+                        return 0;
+                    } 
+                    res /= value;
+                    break;
                 default:
                     return res;
             }
         }
     }
     private int factor() {
-        int res; 
         switch(curlex) {
             case PLUS: 
                 nextlex();
@@ -134,7 +132,7 @@ public class Calculator {
                 return val;
             case OBR:
                 nextlex();
-                res = expr();
+                int res = expr();
                 if (curlex != Lexem.CBR) {
                     curlex = Lexem.ERR;
                     return 0;
