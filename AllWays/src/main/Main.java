@@ -12,6 +12,6 @@ import ways.CountWays;
 public class Main {
     public static void main(String[] args) throws ArgException {
         CountWays cw = new CountWays();
-        System.out.println(cw.getNumbWays(-1, 1));
+        System.out.println(cw.getNumbWays(100, 100));
     }
 }

@@ -31,9 +31,8 @@ public class CheckEmailTest {
     @Test
     public void RightEmail() {
         System.out.println("RigthEmail");
-        String []email = {"dima6120@gmail.com", "dima_6120@gmail.com",
-        "dima.6120@gmail.com","d@gmail.com","dima6120@xz.gmail.com",
-        "dima6120@mail.ru"};
+        String []email = {"a@b.cc", "victor.polozov@mail.ru",
+        "my@domain.info","_.1@mail.com","coins@hermitage.museum"};
         boolean expResult = true;
         boolean result = true;
         for(int i = 0; i < email.length; i++) {
@@ -44,9 +43,8 @@ public class CheckEmailTest {
     @Test
     public void WrongEmail() {
         System.out.println("wrongEmail");
-        String []email = {"dima6120.@gmail.com", "dima61{0@gmail.com",
-        "dima6120@.com",".@gmail.com","1@gmail.com","dima6120@gmail.c",
-        "dima6120com", "dima6120@spbu..com", "dima6120@gmail.coma"};
+        String []email = {"a@b.c", "a..b@mail.ru",
+        ".a@mail.ru","yo@domain.domain","1@mail.ru"};
         boolean expResult = false;
         boolean result = false;
         for(int i = 0; i < email.length; i++) {

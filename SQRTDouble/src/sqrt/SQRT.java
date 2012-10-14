@@ -20,7 +20,7 @@ public class SQRT {
         {
           px=x;
           x=(x+d/x)/2;
-        } while (Math.abs(x - px) > 0.0001);
+        } while (Math.abs(x - px) > 0.0001*px);
         return x;
     } 
 }

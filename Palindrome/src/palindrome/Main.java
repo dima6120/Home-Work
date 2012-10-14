@@ -15,7 +15,7 @@ public class Main {
         
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String s; Palindrome p;
-        p = new CaseInSensitivePalindrome();
+        p = new CaseSensitivePalindrome();
         s = br.readLine();
         System.out.println(p.isPalindrome(s));
     }
