@@ -7,4 +7,5 @@
 package calculator;
 
 
-public enum Lexem {NOTHING, PLUS, MINUS, MULT, DIV, OBR, CBR, VAR, ERR, NUMB}
+public enum Lexem {NOTHING, PLUS, MINUS, MULT, DIV, OBR, CBR, VAR, ERR, NUMB,
+                   ASSIGN}
