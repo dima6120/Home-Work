@@ -16,8 +16,6 @@ public class CaseInSensitivePalindrome extends Palindrome {
         
         int left = 0, right = s.length() - 1;
         
-        s = s.toLowerCase();
-        
         while (left < right) {
                while (!isletordig(s.charAt(left))){
                        if (left == right) {
@@ -33,7 +31,8 @@ public class CaseInSensitivePalindrome extends Palindrome {
                        right--;
                }
 
-               if (s.charAt(left) != s.charAt(right)){
+               if (Character.toLowerCase(s.charAt(left)) 
+                       != Character.toLowerCase(s.charAt(right))){
                        return false;
                }
 
