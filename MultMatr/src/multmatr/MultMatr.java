@@ -35,6 +35,9 @@ class MultThread implements Callable<int[]> {
 }
 public class MultMatr {
     private boolean checkmatr(int [][]a, int [][]b) {
+        if (a == null || b == null || a.length == 0 || b.length == 0) {
+            return false;
+        }
         int len = a[0].length;
         for(int i = 1; i < a.length; i++) {
             if (len != a[i].length) {
