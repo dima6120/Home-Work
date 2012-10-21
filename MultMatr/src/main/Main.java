@@ -6,15 +6,20 @@
 
 package main;
 
-import java.util.Scanner;
-import static multmatr.MultMatr.*;
+import multmatr.MultMatr;
 
 public class Main {
-    static Scanner scan = new Scanner(System.in);
     public static void main(String[] args) {
-        int [][]a = new int [400][200];
-        int [][]b = new int [200][400];
-        for (int i = 0; i < 400; i++) {
+        MultMatr mm = new MultMatr();
+        int [][]a = {{1,2,3},
+                     {4,5,6},
+                     {7,8,9}
+                    };
+        int [][]b = {{1,2},
+                     {4,5},
+                     {7,8}
+                    };
+        /*for (int i = 0; i < 400; i++) {
             for (int j = 0; j < 400; j++) {
                 if (j < 200) {
                     a[i][j] = 2;
@@ -23,8 +28,8 @@ public class Main {
                     b[i][j] = 3;
                 }
             }
-        }
-        int [][]res = mult(a, b);
+        }*/
+        int [][]res = mm.mult(a, b);
         /*int [][]res = new int[400][400];
         for (int i = 0; i < 400; i++) {
             for (int j = 0; j < 400; j++) {
@@ -33,11 +38,11 @@ public class Main {
                 }
             }
         }*/
-        /*for(int []m : res) {
+        for(int []m : res) {
             for(int i = 0; i < m.length; i++) {
                 System.out.print(m[i]+" ");
             }
             System.out.println();
-        }*/
+        }
     }
 }

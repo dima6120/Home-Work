@@ -34,7 +34,30 @@ class MultThread implements Callable<int[]> {
     
 }
 public class MultMatr {
-    public static int [][] mult(int [][]a, int [][]b) {
+    private boolean checkmatr(int [][]a, int [][]b) {
+        int len = a[0].length;
+        for(int i = 1; i < a.length; i++) {
+            if (len != a[i].length) {
+                return false;
+            }
+        }
+        len = b[0].length;
+        for(int i = 1; i < b.length; i++) {
+            if (len != b[i].length) {
+                return false;
+            }
+        }
+        if (a[0].length != b.length) {
+            return false;
+        }
+        return true;
+    }
+    public int [][] mult(int [][]a, int [][]b) {
+        //проверка корректности матриц
+        if (!checkmatr(a,b)) {
+            throw new IllegalArgumentException();
+        }
+        //
         ExecutorService exec = Executors.newCachedThreadPool();
         ArrayList<Future<int[]>> res = new ArrayList<>();
         int k = -1; int [][] r = new int[a.length][b[0].length];
