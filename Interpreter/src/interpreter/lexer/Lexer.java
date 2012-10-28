@@ -13,7 +13,27 @@ import java.util.ArrayList;
 enum Symbol {DIGIT, LETTER, OPBR, CLBR, EQ, SPACE, BINOP, UNKNOW}
 
 public class Lexer {
-    public Lexeme[] parse(String line) {
+    private Lexeme[] l;
+    private int pos;
+    private boolean none;
+    
+    public void nextlexem() {
+        if (pos < l.length - 1) { 
+            pos++;
+        } else {
+            none = true;
+        }
+    }
+    public LexType currlex() {
+        return none ? LexType.NONE : l[pos].getType();
+    }
+    public LexType futurelex() {
+        return (pos + 1) == l.length || none ? LexType.NONE : l[pos+1].getType();
+    }
+    public Lexeme getcurrlex() {
+        return l[pos];
+    }
+    public void parse(String line) {
         ArrayList<Lexeme> res = new ArrayList<>();
         int pos = 0;
         int begin;
@@ -82,10 +102,12 @@ public class Lexer {
                     break;
                 case UNKNOW:
                     //кидаем исключение
-                    return null;
+                    return;
             }
         }
-        return res.toArray(new Lexeme[0]);
+        this.l = res.toArray(new Lexeme[0]);
+        this.pos = 0;
+        none = false;
     }
     private Op toOp(char c) {
         switch (c) {
