@@ -9,6 +9,6 @@ package interpreter.lexer;
 
 public class LetLex extends Lexeme {
     public LetLex(int begin) {
-        super(begin, begin + 3, LexType.NUMB);
+        super(begin, begin + 3, LexType.LET);
     }
 }

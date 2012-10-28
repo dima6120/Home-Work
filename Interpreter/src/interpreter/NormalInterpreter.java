@@ -6,13 +6,15 @@
 
 package interpreter;
 
+import interpreter.exceptions.DivByZeroException;
+import interpreter.exceptions.TypeMismatchException;
 import interpreter.syntax.*;
 
 
 public class NormalInterpreter extends Interpreter{
 
     @Override
-    Expression eval(FunCall funcll) {
+    Expression eval(FunCall funcll) throws DivByZeroException, TypeMismatchException{
         Expression f = eval(funcll.getFun());
         
         if (f.getType() != ExprType.FUNCALL) {
@@ -29,7 +31,7 @@ public class NormalInterpreter extends Interpreter{
     }
 
     @Override
-    Expression eval(Let let) {
+    Expression eval(Let let) throws DivByZeroException, TypeMismatchException {
         Expression x = eval(let.getBound());
        
         return eval(substitute(let.getExpr(),

@@ -6,6 +6,7 @@
 
 package interpreter;
 
+import interpreter.exceptions.*;
 import interpreter.syntax.*;
 import interpreter.syntax.Number;
 
@@ -40,22 +41,19 @@ public abstract class Interpreter {
                 l.setBound(substitute(l.getBound(), id, x));
                 l.setExpr(substitute(l.getExpr(), id, x));
                 return l;
-            default: 
-                //кидаем исключение
-                return null; 
         }
+        return null;
     }
     
-    abstract Expression eval(FunCall funcll);
-    abstract Expression eval(Let let);
+    abstract Expression eval(FunCall funcll) throws DivByZeroException, TypeMismatchException;
+    abstract Expression eval(Let let) throws DivByZeroException, TypeMismatchException;
     
-    private Expression eval(BinOp op) {
+    private Expression eval(BinOp op) throws DivByZeroException, TypeMismatchException {
         Expression l = eval(op.getLeft());
         Expression r = eval(op.getRight());
        
         if (l.getType() != ExprType.NUMBER || r.getType() != ExprType.NUMBER) {
-            //кидаем исключение
-            return null;
+            throw new TypeMismatchException("Number", l);
         }
         
         Number ln = (Number)l;
@@ -67,14 +65,11 @@ public abstract class Interpreter {
             case MULT: return new Number(ln.getVal() * rn.getVal());
             case DIV: 
                 if (rn.getVal() == 0) {
-                    //кидаем исключение
-                    return null;
+                    throw new DivByZeroException();
                 }
                 return new Number(ln.getVal()/rn.getVal());
-            default: 
-                //кидаем исключение
-                return null;
         }
+        return null;
     }
     
     private Expression eval(Identifier id) {
@@ -87,7 +82,7 @@ public abstract class Interpreter {
     private Expression eval(Number numb) {
         return numb;
     }
-    public Expression eval(Expression expr) {
+    public Expression eval(Expression expr) throws DivByZeroException, TypeMismatchException {
         switch (expr.getType()) {
             case BINOP: return eval((BinOp)expr);
             case IDENTIFIER: return eval((Identifier)expr);
@@ -95,9 +90,7 @@ public abstract class Interpreter {
             case FUNCALL: return eval((FunCall)expr);
             case NUMBER: return eval((Number)expr);
             case LET: return eval((Let)expr);
-            default: 
-                //кидаем исключение
-                return null; 
         }
+        return null;
     }
 }

@@ -6,6 +6,7 @@
 
 package interpreter.parser;
 
+import interpreter.exceptions.*;
 import interpreter.lexer.*;
 import interpreter.syntax.*;
 import interpreter.syntax.Number;
@@ -13,41 +14,46 @@ import interpreter.syntax.Number;
 public class Parser {
     private Lexer lexer = new Lexer();
     
-    private Node parseFun() {
+    private Node parseFun() throws LexemeTypeMismatchException, UnexectedLexemException {
         if (lexer.currlex() != LexType.ID) {
-            //исключение
+            throw new LexemeTypeMismatchException("IDENTIFIER Lexeme", 
+                    lexer.getcurrlex());
         }
         String id = ((IdLex)lexer.getcurrlex()).getName();
         lexer.nextlexem();
         if (lexer.currlex() != LexType.ARROW) {
-            //исключение
+            throw new LexemeTypeMismatchException("ARROW Lexeme (->)", 
+                    lexer.getcurrlex());
         }
         lexer.nextlexem();
         //возможно исключение
         Expression body = (Expression)parse();
         return new FunDef(id, body);
     }
-    private Node parseLet() {
+    private Node parseLet() throws LexemeTypeMismatchException, UnexectedLexemException {
         if (lexer.currlex() != LexType.ID) {
-            //исключение
+            throw new LexemeTypeMismatchException("IDENTIFIER Lexeme", 
+                    lexer.getcurrlex());
         }
         String id = ((IdLex)lexer.getcurrlex()).getName();
         lexer.nextlexem();
         if (lexer.currlex() != LexType.ASSIGN) {
-            //исключение
+            throw new LexemeTypeMismatchException("ASSIGN Lexeme (=)", 
+                    lexer.getcurrlex());
         }
         lexer.nextlexem();
         //возможно исключение
         Expression bound = (Expression)parse();
-        lexer.nextlexem();
         if (lexer.currlex() != LexType.IN) {
-            //исключение
+            throw new LexemeTypeMismatchException("IN Lexeme", 
+                    lexer.getcurrlex());
         }
+        lexer.nextlexem();
         //возможно исключение
         Expression expr = (Expression)parse();
         return new Let(id, bound, expr);
     }
-    private Node parseFunCall() {
+    private Node parseFunCall() throws LexemeTypeMismatchException, UnexectedLexemException {
         switch(lexer.currlex()) {
             case NUMB: return new FunCall(null, 
                                           new Number(((NumbLex)lexer.getcurrlex()).getValue()));
@@ -56,7 +62,7 @@ public class Parser {
             default: return new FunCall(null, (Expression)parse());
         }
     }
-    private Node parseExpr() {
+    private Node parseExpr() throws LexemeTypeMismatchException, UnexectedLexemException {
         Node res = term();
         
         while(true) {
@@ -77,7 +83,7 @@ public class Parser {
             }
         }
     }
-    private Node term() {
+    private Node term() throws LexemeTypeMismatchException, UnexectedLexemException {
         Node res = factor();
         
         while(true) {
@@ -98,9 +104,7 @@ public class Parser {
             }
         }
     }
-    private Node factor() {
-        Node res;
-        
+    private Node factor() throws LexemeTypeMismatchException, UnexectedLexemException, UnexectedLexemException {
         switch(lexer.currlex()) {
             case LET: 
                 lexer.nextlexem();
@@ -115,56 +119,54 @@ public class Parser {
             case ID:
                 switch(lexer.futurelex()) {
                     case NONE: 
+                    case IN:
                     case BINOP:
+                        Identifier id = new Identifier(
+                                ((IdLex)lexer.getcurrlex()).getName());
                         lexer.nextlexem();
-                        return new Identifier(((IdLex)lexer.getcurrlex()).getName());
+                        return id;
                     default:
                         Expression fun = new Identifier(
                                 ((IdLex)lexer.getcurrlex()).getName());
                         lexer.nextlexem();
                         FunCall fc = (FunCall)parseFunCall();
                         fc.setFun(fun);
+                        lexer.nextlexem();
                         return fc;
                 }
             case OPBRACKET:
                 lexer.nextlexem();
                 Expression expr = (Expression)parse();
                 if (lexer.currlex() != LexType.CLBRACKET) {
-                    //исключение
-                    return null;
+                    throw new LexemeTypeMismatchException("CLOSE BRACKET Lexeme", 
+                            lexer.getcurrlex());
                 }
                 if (expr.getType() == ExprType.FUNDEF) {
                     lexer.nextlexem();
                     FunCall fc = (FunCall)parseFunCall();
                     fc.setFun(expr);
+                    lexer.nextlexem();
                     return fc;
                 }
                 return expr;
             default: 
-                //исключение
-                return null;
+                throw new UnexectedLexemException(lexer.getcurrlex());
         }
     }
-    private Node parse() {
+    private Node parse() throws LexemeTypeMismatchException, UnexectedLexemException {
         switch (lexer.currlex()) {      
             case LET: 
             case FUN:
-            case CLBRACKET:
             case OPBRACKET:    
             case ID: 
             case NUMB: 
                 return parseExpr();
         }
-        //исключение
-        return null;
+        throw new UnexectedLexemException(lexer.getcurrlex());
     }
-    public Node parse(String text) {
-        //ловим исключение
+    public Node parse(String text) throws LexemeTypeMismatchException, UnexectedLexemException, UnexectedSymbolException {
         lexer.parse(text);
-        lexer.nextlexem();
-        //ловим исключение
         Node res = this.parse();
-        
         return res;
     }
 }

@@ -6,6 +6,7 @@
 
 package interpreter.lexer;
 
+import interpreter.exceptions.*;
 import interpreter.syntax.Op;
 import java.util.ArrayList;
 
@@ -33,7 +34,7 @@ public class Lexer {
     public Lexeme getcurrlex() {
         return l[pos];
     }
-    public void parse(String line) {
+    public void parse(String line) throws UnexectedSymbolException {
         ArrayList<Lexeme> res = new ArrayList<>();
         int pos = 0;
         int begin;
@@ -101,8 +102,7 @@ public class Lexer {
                     }
                     break;
                 case UNKNOW:
-                    //кидаем исключение
-                    return;
+                    throw new UnexectedSymbolException(l[pos]);
             }
         }
         this.l = res.toArray(new Lexeme[0]);
@@ -136,6 +136,9 @@ public class Lexer {
         }
         if (c == ')') {
             return Symbol.CLBR;
+        }
+        if (c == '=') {
+            return Symbol.EQ;
         }
         
         return Symbol.UNKNOW;

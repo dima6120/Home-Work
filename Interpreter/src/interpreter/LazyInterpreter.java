@@ -6,13 +6,14 @@
 
 package interpreter;
 
+import interpreter.exceptions.*;
 import interpreter.syntax.*;
 
 
 public class LazyInterpreter extends Interpreter{
 
     @Override
-    Expression eval(FunCall funcll) {
+    Expression eval(FunCall funcll) throws DivByZeroException, TypeMismatchException{
         Expression f = eval(funcll.getFun());
         
         if (f.getType() != ExprType.FUNCALL) {
@@ -26,7 +27,7 @@ public class LazyInterpreter extends Interpreter{
     }
 
     @Override
-    Expression eval(Let let) {       
+    Expression eval(Let let) throws DivByZeroException, TypeMismatchException {      
         return eval(substitute(let.getExpr(), let.getId(), let.getBound()));
     }
 
