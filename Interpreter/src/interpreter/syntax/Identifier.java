@@ -18,4 +18,9 @@ public class Identifier extends Expression {
     public String getName() {
         return name;
     } 
+
+    @Override
+    public Object getclone() {
+        return new Identifier(name);
+    }
 }

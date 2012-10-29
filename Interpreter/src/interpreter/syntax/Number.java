@@ -18,4 +18,9 @@ public class Number extends Expression {
     public int getVal() {
         return val;
     }
+
+    @Override
+    public Object getclone() {
+        return new Number(val);
+    }
 }

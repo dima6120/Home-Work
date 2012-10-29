@@ -28,4 +28,9 @@ public class FunDef extends Expression {
     public void setBody(Expression b) {
         body = b;
     }
+
+    @Override
+    public Object getclone() {
+        return new FunDef(id,(Expression)body.getclone());
+    }
 }

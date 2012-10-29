@@ -32,4 +32,9 @@ public class FunCall extends Expression {
     public void setArg(Expression a) {
         arg = a;
     }
+
+    @Override
+    public Object getclone() {
+        return new FunCall((Expression)fun.getclone(),(Expression)arg.getclone());
+    }
 }

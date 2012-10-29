@@ -38,4 +38,9 @@ public class BinOp extends Expression {
     public void setLeft(Expression l) {
         left = l;
     }
+
+    @Override
+    public Object getclone() {
+        return new BinOp(op,(Expression)left.getclone(),(Expression)right.getclone());
+    }
 }

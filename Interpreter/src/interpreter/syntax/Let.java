@@ -38,4 +38,9 @@ public class Let extends Expression {
     public void setExpr(Expression e) {
         expr = e;
     }
+
+    @Override
+    public Object getclone() {
+        return new Let(id,(Expression)bound.getclone(),(Expression)expr.getclone());
+    }
 }

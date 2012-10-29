@@ -22,13 +22,11 @@ public class NormalInterpreter extends Interpreter{
         }
         
         FunDef fun = (FunDef)f; 
-        Expression arg = eval(funcll.getArg());
-        Expression gr = substitute(fun.getBody(), 
+        Expression res = eval(substitute(fun.getBody(), 
                                fun.getId(), 
-                               arg
-                              );
-        
-        return eval(gr);
+                               eval(funcll.getArg())
+                              ));
+        return res;
     }
 
     @Override

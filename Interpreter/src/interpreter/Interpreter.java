@@ -21,13 +21,15 @@ public abstract class Interpreter {
             case IDENTIFIER: 
                 Identifier i = (Identifier)expr;
                 if (id.equals(i.getName())) {
-                    return x;
+                    return (Expression)x.getclone();
                 }    
                 return i;
             case FUNDEF:
                 FunDef f = (FunDef)expr;
                 //а если id = f.id? чё делать?
-                f.setBody(substitute(f.getBody(), id, x));
+                if (!f.getId().equals(id)) {
+                    f.setBody(substitute(f.getBody(), id, x));
+                }
                 return f;
             case FUNCALL: 
                 FunCall c = (FunCall)expr;

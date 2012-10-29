@@ -7,6 +7,6 @@
 package interpreter.syntax;
 
 
-public class Node {
-
+public abstract class Node {
+    abstract public Object getclone();
 }
