@@ -17,23 +17,22 @@ public class NormalInterpreter extends Interpreter{
     Expression eval(FunCall funcll) throws DivByZeroException, TypeMismatchException{
         Expression f = eval(funcll.getFun());
         
-        if (f.getType() != ExprType.FUNCALL) {
-            //кидаем исключение
-            return null;
+        if (f.getType() != ExprType.FUNDEF) {
+            throw new TypeMismatchException("Function Def", f);
         }
         
         FunDef fun = (FunDef)f; 
-        
-        return eval(substitute(fun.getBody(), 
+        Expression arg = eval(funcll.getArg());
+        Expression gr = substitute(fun.getBody(), 
                                fun.getId(), 
-                               eval(funcll.getArg())
-                              ));
+                               arg
+                              );
+        
+        return eval(gr);
     }
 
     @Override
     Expression eval(Let let) throws DivByZeroException, TypeMismatchException {
-        Expression x = eval(let.getBound());
-       
         return eval(substitute(let.getExpr(),
                                let.getId(), 
                                eval(let.getBound())

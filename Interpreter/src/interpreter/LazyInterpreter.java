@@ -16,9 +16,8 @@ public class LazyInterpreter extends Interpreter{
     Expression eval(FunCall funcll) throws DivByZeroException, TypeMismatchException{
         Expression f = eval(funcll.getFun());
         
-        if (f.getType() != ExprType.FUNCALL) {
-            //кидаем исключение
-            return null;
+        if (f.getType() != ExprType.FUNDEF) {
+            throw new TypeMismatchException("Function Def", f);
         }
         
         FunDef fun = (FunDef)f; 

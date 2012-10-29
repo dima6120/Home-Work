@@ -118,6 +118,7 @@ public class Parser {
                 return new Number(n.getValue());
             case ID:
                 switch(lexer.futurelex()) {
+                    case CLBRACKET:
                     case NONE: 
                     case IN:
                     case BINOP:
