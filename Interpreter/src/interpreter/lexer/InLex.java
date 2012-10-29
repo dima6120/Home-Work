@@ -8,7 +8,7 @@ package interpreter.lexer;
 
 
 public class InLex extends Lexeme {
-    public InLex(int begin) {
-        super(begin, begin + 2, LexType.IN);
+    public InLex() {
+        super(LexType.IN);
     }
 }

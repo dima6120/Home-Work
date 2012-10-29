@@ -37,19 +37,18 @@ public class Lexer {
     public void parse(String line) throws UnexectedSymbolException {
         ArrayList<Lexeme> res = new ArrayList<>();
         int pos = 0;
-        int begin;
+        //int begin;
         char []l = line.toCharArray();
         while(pos < l.length) {
             Symbol symtype = nextSymbol(l[pos]);
-            begin = pos;
+            //begin = pos;
             switch (symtype) {
                 case DIGIT:
                     String numb = Character.toString(l[pos++]);
                     while (pos < l.length && nextSymbol(l[pos]) == Symbol.DIGIT) {
                         numb += Character.toString(l[pos++]);
                     }
-                    res.add(new NumbLex(Integer.parseInt(numb),begin, begin + 
-                            numb.length()));
+                    res.add(new NumbLex(Integer.parseInt(numb)));
                     break;
                 case LETTER:
                     String str = Character.toString(l[pos++]);
@@ -59,28 +58,28 @@ public class Lexer {
                     } 
                     switch (str) {
                         case "let":
-                            res.add(new LetLex(begin));
+                            res.add(new LetLex());
                             break;
                         case "in":
-                            res.add(new InLex(begin));
+                            res.add(new InLex());
                             break;
                         case "fun":
-                            res.add(new FunLex(begin));
+                            res.add(new FunLex());
                             break;
                         default:
-                            res.add(new IdLex(str, begin));
+                            res.add(new IdLex(str));
                     }
                     break;
                 case OPBR:
-                    res.add(new OpBracketLex(begin));
+                    res.add(new OpBracketLex());
                     pos++;
                     break;
                 case CLBR:
-                    res.add(new ClBracketLex(begin));
+                    res.add(new ClBracketLex());
                     pos++;
                     break;
                 case EQ:
-                    res.add(new AssignLex(begin));
+                    res.add(new AssignLex());
                     pos++;
                     break;
                 case SPACE:
@@ -92,13 +91,13 @@ public class Lexer {
                 case BINOP:
                     if (l[pos] == '-') {
                         if ((pos + 1) < l.length && l[pos + 1] == '>') {
-                            res.add(new ArrowLex(begin));
+                            res.add(new ArrowLex());
                             pos += 2;
                         } else {
-                            res.add(new BinOpLex(toOp(l[pos++]), begin));
+                            res.add(new BinOpLex(toOp(l[pos++])));
                         }
                     } else {
-                        res.add(new BinOpLex(toOp(l[pos++]), begin));
+                        res.add(new BinOpLex(toOp(l[pos++])));
                     }
                     break;
                 case UNKNOW:

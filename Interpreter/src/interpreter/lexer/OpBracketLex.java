@@ -8,7 +8,7 @@ package interpreter.lexer;
 
 
 public class OpBracketLex extends Lexeme {
-    public OpBracketLex(int begin) {
-        super(begin, begin + 1, LexType.OPBRACKET);
+    public OpBracketLex() {
+        super(LexType.OPBRACKET);
     }
 }

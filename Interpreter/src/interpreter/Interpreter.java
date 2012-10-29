@@ -40,8 +40,10 @@ public abstract class Interpreter {
                 return expr;
             case LET: 
                 Let l = (Let)expr;
-                l.setBound(substitute(l.getBound(), id, x));
-                l.setExpr(substitute(l.getExpr(), id, x));
+                if (!l.getId().equals(id)) {
+                    l.setBound(substitute(l.getBound(), id, x));
+                    l.setExpr(substitute(l.getExpr(), id, x));
+                }
                 return l;
         }
         return null;
@@ -50,7 +52,7 @@ public abstract class Interpreter {
     abstract Expression eval(FunCall funcll) throws DivByZeroException, TypeMismatchException;
     abstract Expression eval(Let let) throws DivByZeroException, TypeMismatchException;
     
-    private Expression eval(BinOp op) throws DivByZeroException, TypeMismatchException {
+    private Expression eval(BinOp op) throws DivByZeroException, TypeMismatchException, UnexpectedTypeException {
         Expression l = eval(op.getLeft());
         Expression r = eval(op.getRight());
        
@@ -74,9 +76,8 @@ public abstract class Interpreter {
         return null;
     }
     
-    private Expression eval(Identifier id) {
-        //ошибка!!!
-        return null;
+    private Expression eval(Identifier id) throws UnexpectedTypeException {
+        throw new UnexpectedTypeException(id);
     }
     private Expression eval(FunDef fundf) {
         return fundf;
@@ -84,7 +85,7 @@ public abstract class Interpreter {
     private Expression eval(Number numb) {
         return numb;
     }
-    public Expression eval(Expression expr) throws DivByZeroException, TypeMismatchException {
+    public Expression eval(Expression expr) throws DivByZeroException, TypeMismatchException, UnexpectedTypeException {
         switch (expr.getType()) {
             case BINOP: return eval((BinOp)expr);
             case IDENTIFIER: return eval((Identifier)expr);

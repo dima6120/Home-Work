@@ -18,7 +18,7 @@ public class NormalInterpreter extends Interpreter{
         Expression f = eval(funcll.getFun());
         
         if (f.getType() != ExprType.FUNDEF) {
-            throw new TypeMismatchException("Function Def", f);
+            throw new TypeMismatchException("FUNCTION DEFINITION", f);
         }
         
         FunDef fun = (FunDef)f; 

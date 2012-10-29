@@ -10,8 +10,8 @@ package interpreter.lexer;
 public class IdLex extends Lexeme {
     private String name;
     
-    public IdLex(String name, int begin) {
-        super(begin, begin + name.length(), LexType.ID);
+    public IdLex(String name) {
+        super(LexType.ID);
         this.name = name; 
     }
     

@@ -55,10 +55,16 @@ public class Parser {
     }
     private Node parseFunCall() throws LexemeTypeMismatchException, UnexectedLexemException {
         switch(lexer.currlex()) {
-            case NUMB: return new FunCall(null, 
-                                          new Number(((NumbLex)lexer.getcurrlex()).getValue()));
-            case ID: return new FunCall(null, 
-                                        new Identifier(((IdLex)lexer.getcurrlex()).getName()));
+            case NUMB: 
+                    int val = ((NumbLex)lexer.getcurrlex()).getValue();
+                    lexer.nextlexem();
+                    return new FunCall(null, 
+                                          new Number(val));
+            case ID:
+                String name = ((IdLex)lexer.getcurrlex()).getName();
+                lexer.nextlexem();
+                return new FunCall(null, 
+                                        new Identifier(name));
             default: return new FunCall(null, (Expression)parse());
         }
     }
@@ -132,7 +138,6 @@ public class Parser {
                         lexer.nextlexem();
                         FunCall fc = (FunCall)parseFunCall();
                         fc.setFun(fun);
-                        lexer.nextlexem();
                         return fc;
                 }
             case OPBRACKET:
@@ -149,6 +154,7 @@ public class Parser {
                     lexer.nextlexem();
                     return fc;
                 }
+                lexer.nextlexem();
                 return expr;
             default: 
                 throw new UnexectedLexemException(lexer.getcurrlex());

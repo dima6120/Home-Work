@@ -10,8 +10,8 @@ package interpreter.lexer;
 public class NumbLex extends Lexeme {
     private int value;
     
-    public NumbLex(int value, int begin, int end) {
-        super(begin, end, LexType.NUMB);
+    public NumbLex(int value) {
+        super(LexType.NUMB);
         this.value = value;
     }
     

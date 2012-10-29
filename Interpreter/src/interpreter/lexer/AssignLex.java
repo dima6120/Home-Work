@@ -8,7 +8,7 @@ package interpreter.lexer;
 
 
 public class AssignLex extends Lexeme {
-    public AssignLex(int begin) {
-        super(begin, begin + 1, LexType.ASSIGN);
+    public AssignLex() {
+        super(LexType.ASSIGN);
     }
 }

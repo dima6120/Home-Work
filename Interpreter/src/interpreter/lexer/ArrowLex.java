@@ -8,7 +8,7 @@ package interpreter.lexer;
 
 
 public class ArrowLex extends Lexeme {
-    public ArrowLex(int begin) {
-        super(begin, begin + 2, LexType.ARROW);
+    public ArrowLex() {
+        super(LexType.ARROW);
     }
 }

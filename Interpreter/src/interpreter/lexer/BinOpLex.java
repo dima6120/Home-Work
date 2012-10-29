@@ -11,8 +11,8 @@ import interpreter.syntax.Op;
 public class BinOpLex extends Lexeme {
     private Op op;
     
-    public BinOpLex(Op op, int begin) {
-        super(begin, begin + 1, LexType.BINOP);
+    public BinOpLex(Op op) {
+        super(LexType.BINOP);
         this.op = op;
     }
     

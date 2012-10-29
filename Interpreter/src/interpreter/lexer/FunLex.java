@@ -8,7 +8,7 @@ package interpreter.lexer;
 
 
 public class FunLex extends Lexeme {
-    public FunLex(int begin) {
-        super(begin, begin + 1, LexType.FUN);
+    public FunLex() {
+        super(LexType.FUN);
     }
 }

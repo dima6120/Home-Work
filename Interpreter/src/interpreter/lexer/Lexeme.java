@@ -8,22 +8,10 @@ package interpreter.lexer;
 
 
 public class Lexeme {
-    private int begin;
-    private int end;
-    private LexType type; 
+    private LexType type;
     
-    public Lexeme(int begin, int end, LexType type) {
-        this.begin = begin;
-        this.end = end;
+    public Lexeme(LexType type) {
         this.type = type;
-    }
-    
-    public int getBegin() {
-        return begin;
-    }
-    
-    public int getEnd() {
-        return end;
     }
     
     public LexType getType() {
