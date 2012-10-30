@@ -8,4 +8,4 @@ package interpreter.lexer;
 
 
 public enum LexType {ARROW, ASSIGN, BINOP, CLBRACKET, FUN, ID, IN, LET, NUMB,
-                     OPBRACKET, NONE}
+                     OPBRACKET, EOF}

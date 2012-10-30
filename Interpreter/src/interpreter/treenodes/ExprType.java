@@ -4,7 +4,7 @@
  * @author dima6120
  */
 
-package interpreter.syntax;
+package interpreter.treenodes;
 
 
 public enum ExprType {BINOP, FUNCALL, FUNDEF, IDENTIFIER, LET, NUMBER}

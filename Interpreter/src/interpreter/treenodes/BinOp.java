@@ -4,7 +4,7 @@
  * @author dima6120
  */
 
-package interpreter.syntax;
+package interpreter.treenodes;
 
 
 public class BinOp extends Expression {
@@ -40,7 +40,22 @@ public class BinOp extends Expression {
     }
 
     @Override
-    public Object getclone() {
-        return new BinOp(op,(Expression)left.getclone(),(Expression)right.getclone());
+    public Object deepcopy() {
+        return new BinOp(op,(Expression)left.deepcopy(),(Expression)right.deepcopy());
+    }
+    
+    private String getStrOp() {
+        switch (op) {
+            case ADD: return "+";
+            case SUB: return "-";
+            case MULT: return "*";
+            case DIV: return "/";
+        }
+        return "";
+    }
+    
+    @Override
+    public String toString() {
+        return left.toString() + " " + getStrOp() + " " + right.toString();
     }
 }

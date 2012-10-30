@@ -4,9 +4,9 @@
  * @author dima6120
  */
 
-package interpreter.syntax;
+package interpreter.treenodes;
 
 
 public abstract class Node {
-    abstract public Object getclone();
+    abstract public Object deepcopy();
 }

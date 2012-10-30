@@ -4,7 +4,7 @@
  * @author dima6120
  */
 
-package interpreter.syntax;
+package interpreter.treenodes;
 
 public abstract class Expression extends Node {
     protected ExprType type;

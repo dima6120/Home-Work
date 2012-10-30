@@ -4,7 +4,7 @@
  * @author dima6120
  */
 
-package interpreter.syntax;
+package interpreter.treenodes;
 
 
 public class Number extends Expression {
@@ -20,7 +20,12 @@ public class Number extends Expression {
     }
 
     @Override
-    public Object getclone() {
+    public Object deepcopy() {
         return new Number(val);
+    }
+    
+    @Override
+    public String toString() {
+        return Integer.toString(val);
     }
 }

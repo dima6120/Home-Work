@@ -4,7 +4,7 @@
  * @author dima6120
  */
 
-package interpreter.syntax;
+package interpreter.treenodes;
 
 
 public class Let extends Expression {
@@ -40,7 +40,12 @@ public class Let extends Expression {
     }
 
     @Override
-    public Object getclone() {
-        return new Let(id,(Expression)bound.getclone(),(Expression)expr.getclone());
+    public Object deepcopy() {
+        return new Let(id,(Expression)bound.deepcopy(),(Expression)expr.deepcopy());
+    }
+    
+    @Override
+    public String toString() {
+        return "let " + id + " = " + bound.toString() + " in " + expr.toString();
     }
 }

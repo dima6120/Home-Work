@@ -7,8 +7,14 @@
 package interpreter;
 
 import interpreter.exceptions.*;
-import interpreter.syntax.*;
-import interpreter.syntax.Number;
+import interpreter.treenodes.BinOp;
+import interpreter.treenodes.ExprType;
+import interpreter.treenodes.Expression;
+import interpreter.treenodes.FunCall;
+import interpreter.treenodes.FunDef;
+import interpreter.treenodes.Identifier;
+import interpreter.treenodes.Let;
+import interpreter.treenodes.Number;
 
 public abstract class Interpreter {
     public Expression substitute(Expression expr, String id, Expression x) {
@@ -21,7 +27,7 @@ public abstract class Interpreter {
             case IDENTIFIER: 
                 Identifier i = (Identifier)expr;
                 if (id.equals(i.getName())) {
-                    return (Expression)x.getclone();
+                    return (Expression)x.deepcopy();
                 }    
                 return i;
             case FUNDEF:
@@ -49,8 +55,8 @@ public abstract class Interpreter {
         return null;
     }
     
-    abstract Expression eval(FunCall funcll) throws DivByZeroException, TypeMismatchException;
-    abstract Expression eval(Let let) throws DivByZeroException, TypeMismatchException;
+    abstract Expression eval(FunCall funcll) throws DivByZeroException, TypeMismatchException, UnexpectedTypeException;
+    abstract Expression eval(Let let) throws DivByZeroException, TypeMismatchException, UnexpectedTypeException;
     
     private Expression eval(BinOp op) throws DivByZeroException, TypeMismatchException, UnexpectedTypeException {
         Expression l = eval(op.getLeft());
@@ -79,8 +85,16 @@ public abstract class Interpreter {
     private Expression eval(Identifier id) throws UnexpectedTypeException {
         throw new UnexpectedTypeException(id);
     }
-    private Expression eval(FunDef fundf) {
-        return fundf;
+    private Expression eval(FunDef fundf) throws DivByZeroException, TypeMismatchException {
+        try {
+            Expression res = eval(fundf.getBody());
+            if (res.getType() == ExprType.NUMBER) {
+                return res;
+            }
+            return fundf;
+        } catch (UnexpectedTypeException e) {
+            return fundf;
+        }
     }
     private Expression eval(Number numb) {
         return numb;

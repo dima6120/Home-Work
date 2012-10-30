@@ -4,7 +4,7 @@
  * @author dima6120
  */
 
-package interpreter.syntax;
+package interpreter.treenodes;
 
 
 public enum Op {ADD, SUB, MULT, DIV, NOTHING}

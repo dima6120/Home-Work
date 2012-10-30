@@ -4,7 +4,7 @@
  * @author dima6120
  */
 
-package interpreter.syntax;
+package interpreter.treenodes;
 
 
 public class FunCall extends Expression {
@@ -34,7 +34,12 @@ public class FunCall extends Expression {
     }
 
     @Override
-    public Object getclone() {
-        return new FunCall((Expression)fun.getclone(),(Expression)arg.getclone());
+    public Object deepcopy() {
+        return new FunCall((Expression)fun.deepcopy(),(Expression)arg.deepcopy());
+    }
+    
+    @Override
+    public String toString() {
+        return "call " + fun.toString() + " (" + arg.toString() + ")";
     }
 }

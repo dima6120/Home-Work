@@ -7,7 +7,7 @@
 package interpreter.lexer;
 
 import interpreter.exceptions.*;
-import interpreter.syntax.Op;
+import interpreter.treenodes.Op;
 import java.util.ArrayList;
 
 
@@ -26,10 +26,10 @@ public class Lexer {
         }
     }
     public LexType currlex() {
-        return none ? LexType.NONE : l[pos].getType();
+        return none ? LexType.EOF : l[pos].getType();
     }
     public LexType futurelex() {
-        return (pos + 1) == l.length || none ? LexType.NONE : l[pos+1].getType();
+        return (pos + 1) == l.length || none ? LexType.EOF : l[pos+1].getType();
     }
     public Lexeme getcurrlex() {
         return l[pos];

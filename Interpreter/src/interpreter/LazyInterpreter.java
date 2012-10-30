@@ -7,13 +7,17 @@
 package interpreter;
 
 import interpreter.exceptions.*;
-import interpreter.syntax.*;
+import interpreter.treenodes.ExprType;
+import interpreter.treenodes.Expression;
+import interpreter.treenodes.FunCall;
+import interpreter.treenodes.FunDef;
+import interpreter.treenodes.Let;
 
 
 public class LazyInterpreter extends Interpreter{
 
     @Override
-    Expression eval(FunCall funcll) throws DivByZeroException, TypeMismatchException{
+    Expression eval(FunCall funcll) throws DivByZeroException, TypeMismatchException, UnexpectedTypeException{
         Expression f = eval(funcll.getFun());
         
         if (f.getType() != ExprType.FUNDEF) {
@@ -26,7 +30,7 @@ public class LazyInterpreter extends Interpreter{
     }
 
     @Override
-    Expression eval(Let let) throws DivByZeroException, TypeMismatchException {      
+    Expression eval(Let let) throws DivByZeroException, TypeMismatchException, UnexpectedTypeException {      
         return eval(substitute(let.getExpr(), let.getId(), let.getBound()));
     }
 

@@ -4,7 +4,7 @@
  * @author dima6120
  */
 
-package interpreter.syntax;
+package interpreter.treenodes;
 
 
 public class FunDef extends Expression {
@@ -30,7 +30,12 @@ public class FunDef extends Expression {
     }
 
     @Override
-    public Object getclone() {
-        return new FunDef(id,(Expression)body.getclone());
+    public Object deepcopy() {
+        return new FunDef(id,(Expression)body.deepcopy());
+    }
+    
+    @Override
+    public String toString() {
+        return "fun " + id + " -> " + body.toString(); 
     }
 }

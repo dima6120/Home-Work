@@ -6,7 +6,7 @@
 
 package interpreter.lexer;
 
-import interpreter.syntax.Op;
+import interpreter.treenodes.Op;
 
 public class BinOpLex extends Lexeme {
     private Op op;

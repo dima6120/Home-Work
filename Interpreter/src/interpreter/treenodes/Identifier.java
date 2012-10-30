@@ -4,7 +4,7 @@
  * @author dima6120
  */
 
-package interpreter.syntax;
+package interpreter.treenodes;
 
 
 public class Identifier extends Expression {
@@ -20,7 +20,12 @@ public class Identifier extends Expression {
     } 
 
     @Override
-    public Object getclone() {
+    public Object deepcopy() {
         return new Identifier(name);
+    }
+    
+    @Override
+    public String toString() {
+        return name;
     }
 }

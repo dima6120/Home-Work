@@ -8,8 +8,15 @@ package interpreter.parser;
 
 import interpreter.exceptions.*;
 import interpreter.lexer.*;
-import interpreter.syntax.*;
-import interpreter.syntax.Number;
+import interpreter.treenodes.BinOp;
+import interpreter.treenodes.ExprType;
+import interpreter.treenodes.Expression;
+import interpreter.treenodes.FunCall;
+import interpreter.treenodes.FunDef;
+import interpreter.treenodes.Identifier;
+import interpreter.treenodes.Let;
+import interpreter.treenodes.Node;
+import interpreter.treenodes.Number;
 
 public class Parser {
     private Lexer lexer = new Lexer();
@@ -82,7 +89,7 @@ public class Parser {
                             res = new BinOp(op.getOp(),
                                             (Expression)res,
                                             (Expression)term());
-                            break;
+                            continue;
                     }
                 default: 
                     return res;
@@ -102,8 +109,8 @@ public class Parser {
                             lexer.nextlexem();
                             res = new BinOp(op.getOp(),
                                             (Expression)res,
-                                            (Expression)term());
-                            break;
+                                            (Expression)factor());
+                            continue;
                     }
                 default: 
                     return res;
@@ -125,7 +132,7 @@ public class Parser {
             case ID:
                 switch(lexer.futurelex()) {
                     case CLBRACKET:
-                    case NONE: 
+                    case EOF: 
                     case IN:
                     case BINOP:
                         Identifier id = new Identifier(
@@ -138,6 +145,14 @@ public class Parser {
                         lexer.nextlexem();
                         FunCall fc = (FunCall)parseFunCall();
                         fc.setFun(fun);
+                        
+                        while (lexer.currlex() == LexType.NUMB ||
+                               lexer.currlex() == LexType.ID ||
+                               lexer.currlex() == LexType.OPBRACKET) {
+                            FunCall fc1 = (FunCall)parseFunCall();
+                            fc1.setFun(fc);
+                            fc = fc1;
+                        }
                         return fc;
                 }
             case OPBRACKET:
@@ -147,10 +162,22 @@ public class Parser {
                     throw new LexemeTypeMismatchException("CLOSE BRACKET Lexeme", 
                             lexer.getcurrlex());
                 }
-                if (expr.getType() == ExprType.FUNDEF) {
+                if (expr.getType() == ExprType.FUNDEF || 
+                        ((expr.getType() == ExprType.FUNCALL &&
+                            (lexer.futurelex() == LexType.NUMB ||
+                             lexer.futurelex() == LexType.ID ||
+                             lexer.futurelex() == LexType.OPBRACKET)
+                        ))) {
                     lexer.nextlexem();
                     FunCall fc = (FunCall)parseFunCall();
                     fc.setFun(expr);
+                    while (lexer.currlex() == LexType.NUMB ||
+                           lexer.currlex() == LexType.ID ||
+                           lexer.currlex() == LexType.OPBRACKET) {
+                        FunCall fc1 = (FunCall)parseFunCall();
+                        fc1.setFun(fc);
+                        fc = fc1;
+                    }
                     lexer.nextlexem();
                     return fc;
                 }
@@ -174,6 +201,10 @@ public class Parser {
     public Node parse(String text) throws LexemeTypeMismatchException, UnexectedLexemException, UnexectedSymbolException {
         lexer.parse(text);
         Node res = this.parse();
+        if (lexer.currlex() != LexType.EOF) {
+            throw new LexemeTypeMismatchException("NONE", 
+                    lexer.getcurrlex());
+        }
         return res;
     }
 }
