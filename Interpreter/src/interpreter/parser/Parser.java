@@ -163,39 +163,49 @@ public class Parser {
                 }
             case OPBRACKET:
                 lexer.nextlexem();
-                if (lexer.currlex() == LexType.OPBRACKET) {
-                    allowed = false;
-                }
+                
+                allowed = lexer.currlex() != LexType.OPBRACKET || allowed;
+                
                 Expression expr = (Expression)parse();
+                
                 if (lexer.currlex() != LexType.CLBRACKET) {
                     throw new LexemeTypeMismatchException("CLOSEBRACKET", 
                             lexer.getcurrlex());
                 }
-                if (expr.getType() == ExprType.FUNDEF || 
-                        ((expr.getType() == ExprType.FUNCALL &&
+                
+                if ((expr.getType() == ExprType.FUNDEF ||
+                     expr.getType() == ExprType.FUNCALL) &&
                             (lexer.futurelex() == LexType.NUMB ||
                              lexer.futurelex() == LexType.ID ||
                              lexer.futurelex() == LexType.OPBRACKET)
-                        ))) {
+                        ) {
+                    
                     lexer.nextlexem();
-                    if (expr.getType() == ExprType.FUNCALL && allowed) {
-                        if (!brst.empty()) {
-                            brst.pop();
-                            return expr;
-                        }
-                    }
-                    FunCall fc = (FunCall)parseFunCall();
-                    fc.setFun(expr);
-                    while (lexer.currlex() == LexType.NUMB ||
-                           lexer.currlex() == LexType.ID ||
-                           lexer.currlex() == LexType.OPBRACKET) {
-                        FunCall fc1 = (FunCall)parseFunCall();
-                        fc1.setFun(fc);
-                        fc = fc1;
-                    }
-                    allowed = true;
-                    return fc;
+                   
+                    allowed = expr.getType() == ExprType.FUNDEF || allowed;
+                    
+                    if (allowed) {
+                         if (!brst.empty()) {
+                             brst.pop();
+                             return expr;
+                         }
+                     }
+                     FunCall fc = (FunCall)parseFunCall();
+                     fc.setFun(expr);
+                     while (lexer.currlex() == LexType.NUMB ||
+                            lexer.currlex() == LexType.ID ||
+                            lexer.currlex() == LexType.OPBRACKET) {
+                         FunCall fc1 = (FunCall)parseFunCall();
+                         fc1.setFun(fc);
+                         fc = fc1;
+                     }
+                     
+                     allowed = expr.getType() == ExprType.FUNCALL || 
+                               lexer.currlex() != LexType.CLBRACKET;
+                     
+                     return fc;
                 }
+                
                 lexer.nextlexem();
                 return expr;
             default: 
