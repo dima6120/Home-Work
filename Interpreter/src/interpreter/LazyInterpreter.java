@@ -34,4 +34,9 @@ public class LazyInterpreter extends Interpreter{
         return eval(substitute(let.getExpr(), let.getId(), let.getBound()));
     }
 
+    @Override
+    Expression eval(FunDef fundf) throws DivByZeroException, TypeMismatchException {
+        return fundf;
+    }
+
 }

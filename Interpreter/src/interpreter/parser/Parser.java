@@ -178,7 +178,6 @@ public class Parser {
                         fc1.setFun(fc);
                         fc = fc1;
                     }
-                    lexer.nextlexem();
                     return fc;
                 }
                 lexer.nextlexem();

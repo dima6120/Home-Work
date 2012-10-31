@@ -36,6 +36,6 @@ public class FunDef extends Expression {
     
     @Override
     public String toString() {
-        return "fun " + id + " -> " + body.toString(); 
+        return "[fun " + id + " -> " + body.toString()+"]"; 
     }
 }

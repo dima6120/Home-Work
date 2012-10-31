@@ -85,17 +85,7 @@ public abstract class Interpreter {
     private Expression eval(Identifier id) throws UnexpectedTypeException {
         throw new UnexpectedTypeException(id);
     }
-    private Expression eval(FunDef fundf) throws DivByZeroException, TypeMismatchException {
-        try {
-            Expression res = eval(fundf.getBody());
-            if (res.getType() == ExprType.NUMBER) {
-                return res;
-            }
-            return fundf;
-        } catch (UnexpectedTypeException e) {
-            return fundf;
-        }
-    }
+    abstract Expression eval(FunDef fundf) throws DivByZeroException, TypeMismatchException;
     private Expression eval(Number numb) {
         return numb;
     }

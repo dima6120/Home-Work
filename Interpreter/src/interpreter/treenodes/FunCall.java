@@ -40,6 +40,6 @@ public class FunCall extends Expression {
     
     @Override
     public String toString() {
-        return "call " + fun.toString() + " (" + arg.toString() + ")";
+        return "[call " + fun.toString() + " (" + arg.toString() + ")]";
     }
 }
