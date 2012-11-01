@@ -14,10 +14,10 @@ import interpreter.treenodes.Node;
 
 public class Main {
     public static void main(String[] args) throws LexemeTypeMismatchException, UnexectedLexemException, UnexectedSymbolException, DivByZeroException, TypeMismatchException, UnexpectedTypeException {
-        Parser1 pr = new Parser1();
-        Node n = pr.parse("let f = fun x -> x + 1 in let x = 2 in f x");
+        Parser pr = new Parser();
+        Node n = pr.parse("let f = fun x -> fun y -> x + y in let y = 1 in let x = 1 in f y (f (f x 1) x)");
         // ((fun x -> x) (fun x -> x + 5)) 3
-        // let f = fun x -> fun y -> x + y in f ((f 1) 1) 1
+        // let f = fun x -> fun y -> x + y in f 1 (1 (f 1 1))
         Interpreter i = new LazyInterpreter();
         Expression e = i.eval((Expression)n);
         System.out.println(e.toString());

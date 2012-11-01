@@ -24,21 +24,22 @@ public class Parser1 {
     private Lexer lexer = new Lexer();
     private Stack brst = new Stack();
     private boolean allowed = false;
+    private boolean funcall = false;
     
     private boolean endofexpr(Expression res) {
-        if (res.getType() == ExprType.NUMBER 
-            && (lexer.currlex() == LexType.NUMB || lexer.currlex() == LexType.ID)
-           ) {
-            return true;
-        }
         switch(lexer.currlex()) {
             case CLBRACKET:
             case EOF:    
             case IN:
                 return true;
+            case NUMB:
+            case ID:
+            case OPBRACKET:
+                return res.getType() == ExprType.NUMBER || 
+                       (res.getType() == ExprType.IDENTIFIER && funcall);
+            default:
+                return false;
         }
-        
-        return false;
     }
     
     private Node parseExpr() throws LexemeTypeMismatchException, UnexectedLexemException {
@@ -48,6 +49,7 @@ public class Parser1 {
             default:
                 Node res = expr(); ExprType rest = ((Expression)res).getType();
                 if (endofexpr(((Expression)res))) {
+                    funcall = false;
                     return res;
                 } 
                 if (((Expression)res).getType() == ExprType.FUNCALL) {
@@ -71,6 +73,7 @@ public class Parser1 {
                             allowed = true;
                     }
                 }
+                funcall = true;
                 FunCall fc = new FunCall((Expression)res, (Expression)parseExpr());
                 while (lexer.currlex() == LexType.NUMB ||
                        lexer.currlex() == LexType.ID ||
@@ -187,6 +190,7 @@ public class Parser1 {
     public Node parse(String text) throws LexemeTypeMismatchException, UnexectedLexemException, UnexectedSymbolException {
         lexer.parse(text);
         allowed = false;
+        funcall = false;
         Node res = this.parseExpr();
         if (lexer.currlex() != LexType.EOF) {
             throw new LexemeTypeMismatchException("EOFLexeme", 
