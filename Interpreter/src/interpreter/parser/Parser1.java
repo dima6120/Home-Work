@@ -25,6 +25,7 @@ public class Parser1 {
     private Stack brst = new Stack();
     private boolean allowed = false;
     private boolean funcall = false;
+    private boolean bracket = false;
     
     private boolean endofexpr(Expression res) {
         switch(lexer.currlex()) {
@@ -36,7 +37,8 @@ public class Parser1 {
             case ID:
             case OPBRACKET:
                 return res.getType() == ExprType.NUMBER || 
-                       (res.getType() == ExprType.IDENTIFIER && funcall);
+                       (res.getType() == ExprType.IDENTIFIER 
+                        && funcall && !bracket);
             default:
                 return false;
         }
@@ -50,8 +52,10 @@ public class Parser1 {
                 Node res = expr(); ExprType rest = ((Expression)res).getType();
                 if (endofexpr(((Expression)res))) {
                     funcall = false;
+                    bracket = false;
                     return res;
                 } 
+                bracket = false;
                 if (((Expression)res).getType() == ExprType.FUNCALL) {
                     if (allowed) {
                         if (!brst.empty()) {
@@ -78,6 +82,7 @@ public class Parser1 {
                 while (lexer.currlex() == LexType.NUMB ||
                        lexer.currlex() == LexType.ID ||
                        lexer.currlex() == LexType.OPBRACKET) {
+                    funcall = true;
                     res = parseExpr();
                     fc = new FunCall(fc,(Expression)res);
                 }
@@ -136,6 +141,7 @@ public class Parser1 {
     private Node parseBracket() throws LexemeTypeMismatchException, UnexectedLexemException {
         lexer.nextlexem();
         allowed = lexer.currlex() != LexType.OPBRACKET || allowed;
+        bracket = true;
         Node res = parseExpr();
         if (lexer.currlex() != LexType.CLBRACKET) {
             throw new LexemeTypeMismatchException("ClBracketLexeme", lexer.getcurrlex());
@@ -191,6 +197,7 @@ public class Parser1 {
         lexer.parse(text);
         allowed = false;
         funcall = false;
+        bracket = false;
         Node res = this.parseExpr();
         if (lexer.currlex() != LexType.EOF) {
             throw new LexemeTypeMismatchException("EOFLexeme", 
