@@ -1,0 +1,11 @@
+Expr ::= Let | Fun | expr
+Let ::= 'let' Id '=' Expr 'in' Expr
+Fun ::= 'fun' Id '->' Expr
+expr ::= term (+|- term)
+factor ::= funcall
+funcall ::= primary | primaryNoNumb (primary)*
+primary ::= Numb | Id | Brackets
+primaryNoNumb ::= Id | Brackets 
+Brackets ::= '(' Expr ')'
+Id ::= Letter(Letter|Digit)*
+Number ::= Digit(Digit)* 

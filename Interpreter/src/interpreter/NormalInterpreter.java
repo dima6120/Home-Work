@@ -39,18 +39,4 @@ public class NormalInterpreter extends Interpreter{
                                eval(let.getBound())
                               ));
     }
-
-    @Override
-    Expression eval(FunDef fundf) throws DivByZeroException, TypeMismatchException {
-        try {
-            Expression res = eval(fundf.getBody());
-            if (res.getType() == ExprType.NUMBER) {
-                return res;
-            }
-            return fundf;
-        } catch (UnexpectedTypeException e) {
-            return fundf;
-        }
-    }
-
 }

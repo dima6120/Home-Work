@@ -18,84 +18,16 @@ import interpreter.treenodes.Let;
 import interpreter.treenodes.Node;
 import interpreter.treenodes.Number;
 import interpreter.treenodes.Op;
-import java.util.Stack;
 
 public class Parser {
     private Lexer lexer = new Lexer();
-    private Stack brst = new Stack();
-    private boolean allowed = false;
-    private boolean funcall = false;
-    private boolean bracket = false;
-    
-    private boolean endofexpr(Expression res) {
-        switch(lexer.currlex()) {
-            case CLBRACKET:
-            case EOF:    
-            case IN:
-                return true;
-            case NUMB:
-            case ID:
-            case OPBRACKET:
-                return res.getType() == ExprType.NUMBER || 
-                       (res.getType() == ExprType.IDENTIFIER 
-                        && funcall && !bracket);
-            default:
-                return false;
-        }
-    }
-    
-    private Node parseFunCall(Expression res) throws LexemeTypeMismatchException, UnexectedLexemException {
-        ExprType rest = ((Expression)res).getType();
-        
-        if (((Expression)res).getType() == ExprType.IDENTIFIER
-                && (lexer.currlex() != LexType.NUMB &&
-                lexer.currlex() != LexType.ID)) {
-            switch(lexer.currlex()) {
-                case CLBRACKET:
-                case EOF: 
-                    break;
-                default:
-                    brst.push(LexType.OPBRACKET);
-                    allowed = true;
-            }
-        }
-        funcall = true;
-        FunCall fc = new FunCall(res, (Expression)parseExpr());
-        while (lexer.currlex() == LexType.NUMB ||
-               lexer.currlex() == LexType.ID ||
-               lexer.currlex() == LexType.OPBRACKET) {
-            funcall = true;
-            res = (Expression)parseExpr();
-            fc = new FunCall(fc,(Expression)res);
-        }
-        allowed = rest == ExprType.FUNCALL || 
-                lexer.currlex() == LexType.CLBRACKET;
-        return fc;
-    }
     
     private Node parseExpr() throws LexemeTypeMismatchException, UnexectedLexemException {
         switch (lexer.currlex()) {
             case LET: return parseLet();
             case FUN: return parseFun();
-            default:
-                Node res = expr(); 
-                if (endofexpr(((Expression)res))) {
-                    funcall = false;
-                    bracket = false;
-                    return res;
-                } 
-                bracket = false;
-                if (((Expression)res).getType() == ExprType.FUNCALL) {
-                    if (allowed) {
-                        if (!brst.empty()) {
-                            brst.pop();
-                            return res;
-                        }
-                    }
-                }
-                
-                return parseFunCall((Expression)res);
-        }
+            default: return expr(); 
+        }   
     }
     
     private Node expr() throws LexemeTypeMismatchException, UnexectedLexemException {
@@ -128,6 +60,21 @@ public class Parser {
     }
     
     private Node factor() throws LexemeTypeMismatchException, UnexectedLexemException {
+        return funcall();
+    }
+    
+    private Node funcall() throws LexemeTypeMismatchException, UnexectedLexemException {
+        Node n = primary();
+        if (((Expression)n).getType() != ExprType.NUMBER) {
+            while(lexer.currlex() == LexType.ID ||
+                  lexer.currlex() == LexType.OPBRACKET ||
+                  lexer.currlex() == LexType.NUMB) {
+                n = new FunCall((Expression)n, (Expression)primary());
+            }
+        }
+        return n;
+    }
+    private Node primary() throws LexemeTypeMismatchException, UnexectedLexemException {
         switch(lexer.currlex()) {
             case NUMB: 
                 int val = ((NumbLex)lexer.getcurrlex()).getValue();
@@ -142,12 +89,9 @@ public class Parser {
         }
         throw new LexemeTypeMismatchException("NumberLexeme or IdLexeme or OpBracketLexeme", 
                 lexer.getcurrlex());
-    }
-    
+    }    
     private Node parseBracket() throws LexemeTypeMismatchException, UnexectedLexemException {
         lexer.nextlexem();
-        allowed = lexer.currlex() != LexType.OPBRACKET || allowed;
-        bracket = true;
         Node res = parseExpr();
         if (lexer.currlex() != LexType.CLBRACKET) {
             throw new LexemeTypeMismatchException("ClBracketLexeme", lexer.getcurrlex());
@@ -201,10 +145,6 @@ public class Parser {
     
     public Node parse(String text) throws LexemeTypeMismatchException, UnexectedLexemException, UnexectedSymbolException {
         lexer.parse(text);
-        allowed = false;
-        funcall = false;
-        bracket = false;
-        brst.clear();
         Node res = this.parseExpr();
         if (lexer.currlex() != LexType.EOF) {
             throw new LexemeTypeMismatchException("EOFLexeme", 

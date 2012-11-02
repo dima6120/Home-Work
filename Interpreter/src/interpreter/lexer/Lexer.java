@@ -25,6 +25,10 @@ public class Lexer {
             none = true;
         }
     }
+    public LexType lastlex() {
+        return (pos - 1) < 0 ? LexType.EOF : l[pos-1].getType();
+    }
+    
     public LexType currlex() {
         return none ? LexType.EOF : l[pos].getType();
     }

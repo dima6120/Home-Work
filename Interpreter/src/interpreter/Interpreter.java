@@ -81,11 +81,12 @@ public abstract class Interpreter {
         }
         return null;
     }
-    
+    private Expression eval(FunDef fundf) throws DivByZeroException, TypeMismatchException {
+        return fundf;
+    }
     private Expression eval(Identifier id) throws UnexpectedTypeException {
         throw new UnexpectedTypeException(id);
     }
-    abstract Expression eval(FunDef fundf) throws DivByZeroException, TypeMismatchException;
     private Expression eval(Number numb) {
         return numb;
     }
