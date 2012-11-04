@@ -26,7 +26,7 @@ public class ParserTest {
         Parser instance = new Parser();
         Interpreter i = new LazyInterpreter();
         String expResult = "4";
-        Expression e = i.eval((Expression)instance.parse(text));
+        Expression e = i.evalExpr((Expression)instance.parse(text));
         String result = e.toString();
         assertEquals(expResult, result);
     }
@@ -37,7 +37,7 @@ public class ParserTest {
         Parser instance = new Parser();
         Interpreter i = new LazyInterpreter();
         String expResult = "540";
-        Expression e = i.eval((Expression)instance.parse(text));
+        Expression e = i.evalExpr((Expression)instance.parse(text));
         String result = e.toString();
         assertEquals(expResult, result);
     }
@@ -48,7 +48,7 @@ public class ParserTest {
         Parser instance = new Parser();
         Interpreter i = new LazyInterpreter();
         String expResult = "8";
-        Expression e = i.eval((Expression)instance.parse(text));
+        Expression e = i.evalExpr((Expression)instance.parse(text));
         String result = e.toString();
         assertEquals(expResult, result);
     }
@@ -59,7 +59,7 @@ public class ParserTest {
         Parser instance = new Parser();
         Interpreter i = new LazyInterpreter();
         String expResult = "3";
-        Expression e = i.eval((Expression)instance.parse(text));
+        Expression e = i.evalExpr((Expression)instance.parse(text));
         String result = e.toString();
         assertEquals(expResult, result);
     }
@@ -70,7 +70,7 @@ public class ParserTest {
         Parser instance = new Parser();
         Interpreter i = new LazyInterpreter();
         String expResult = "2";
-        Expression e = i.eval((Expression)instance.parse(text));
+        Expression e = i.evalExpr((Expression)instance.parse(text));
         String result = e.toString();
         assertEquals(expResult, result);
     }

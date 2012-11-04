@@ -17,7 +17,12 @@ import interpreter.treenodes.Let;
 import interpreter.treenodes.Number;
 
 public abstract class Interpreter {
+    private int count;
+    public int getCount() {
+        return count;
+    }
     public Expression substitute(Expression expr, String id, Expression x) {
+        count++;
         switch (expr.getType()) {
             case BINOP: 
                 BinOp op = (BinOp)expr;
@@ -32,7 +37,6 @@ public abstract class Interpreter {
                 return i;
             case FUNDEF:
                 FunDef f = (FunDef)expr;
-                //а если id = f.id? чё делать?
                 if (!f.getId().equals(id)) {
                     f.setBody(substitute(f.getBody(), id, x));
                 }
@@ -61,7 +65,7 @@ public abstract class Interpreter {
     private Expression eval(BinOp op) throws DivByZeroException, TypeMismatchException, UnexpectedTypeException {
         Expression l = eval(op.getLeft());
         Expression r = eval(op.getRight());
-       
+        
         if (l.getType() != ExprType.NUMBER || r.getType() != ExprType.NUMBER) {
             throw new TypeMismatchException("Number", l);
         }
@@ -90,7 +94,12 @@ public abstract class Interpreter {
     private Expression eval(Number numb) {
         return numb;
     }
-    public Expression eval(Expression expr) throws DivByZeroException, TypeMismatchException, UnexpectedTypeException {
+    public Expression evalExpr(Expression expr) throws DivByZeroException, TypeMismatchException, UnexpectedTypeException {
+        count = 0;
+        return eval(expr);
+    }
+    protected Expression eval(Expression expr) throws DivByZeroException, TypeMismatchException, UnexpectedTypeException {
+        count++;
         switch (expr.getType()) {
             case BINOP: return eval((BinOp)expr);
             case IDENTIFIER: return eval((Identifier)expr);
