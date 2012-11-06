@@ -56,6 +56,7 @@ public class BinOp extends Expression {
     
     @Override
     public String toString() {
-        return left.toString() + " " + getStrOp() + " " + right.toString();
+        return "(" + left.toString() + " " + getStrOp() + " " + right.toString() +
+                ")";
     }
 }

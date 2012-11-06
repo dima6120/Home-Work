@@ -65,12 +65,10 @@ public class Parser {
     
     private Node funcall() throws LexemeTypeMismatchException, UnexectedLexemException {
         Node n = primary();
-        if (((Expression)n).getType() != ExprType.NUMBER) {
-            while(lexer.currlex() == LexType.ID ||
-                  lexer.currlex() == LexType.OPBRACKET ||
-                  lexer.currlex() == LexType.NUMB) {
-                n = new FunCall((Expression)n, (Expression)primary());
-            }
+        while(lexer.currlex() == LexType.ID ||
+              lexer.currlex() == LexType.OPBRACKET ||
+              lexer.currlex() == LexType.NUMB) {
+            n = new FunCall((Expression)n, (Expression)primary());
         }
         return n;
     }
