@@ -12,21 +12,30 @@ public class Calculator {
     protected HashTable vars = new HashTable(1000);
     private Lexer lr;
     private int res;
+    private OpType lop = OpType.NONE;
     
     public Calculator() {
         lr = new Lexer(this);
     }
-    public int expr(String s) {
-        lr.setLine(s);
-        if (!parseassign()) {
-            res = expr();
-            if (lr.curlex() == Lexem.NOTHING) {
-                System.out.println(Integer.toString(res));
-            } else {
-                System.out.println("ERROR!");
-            }
-        }
+    public OpType getlastop() {
+        return lop;
+    }
+    public int getres() {
         return res;
+    }
+    public void expr(String s) {
+        if (s != null) {
+            lr.setLine(s);
+            if (!parseassign()) {
+                res = expr();
+                lop = lr.curlex() != Lexem.NOTHING ? OpType.ERROR : OpType.EVAL;
+                if (lr.curlex() == Lexem.VAR && lr.isnewvar()) {
+                    vars.delete(lr.getvarname());
+                }
+            }
+        } else {
+            lop = OpType.ERROR;
+        }
     }
     private boolean parseassign() {
         lr.nextlex();
@@ -42,8 +51,8 @@ public class Calculator {
                 lr.nextlex();
                 res = expr();
                 if (lr.curlex() != Lexem.NOTHING) {
-                    res = 0;
-                    System.out.println("ERROR!");
+                    lop = OpType.ERROR;
+                    return true;
                 } else {
                     if (newvar) {
                         vars.put(varname, res);
@@ -53,8 +62,8 @@ public class Calculator {
                             e.setData(res);
                         }
                     }
-                    System.out.println(varname + "="+ Integer.toString(res));
                 }
+                lop = OpType.ASSIGN;
                 return true;
             }
         }

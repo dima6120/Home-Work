@@ -21,7 +21,16 @@ public class Main {
             if (s.equals("exit")) {
                 break;
             }
+            
             calc.expr(s);
+            
+            switch(calc.getlastop()) {
+                case EVAL: 
+                    System.out.println(calc.getres());
+                    break;
+                case ERROR:
+                    System.out.println("ERROR!"); 
+            }    
        } while (true);
     }
 }
