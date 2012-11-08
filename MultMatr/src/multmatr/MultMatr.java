@@ -34,7 +34,7 @@ class MultThread implements Callable<int[]> {
     
 }
 public class MultMatr {
-    private boolean checkmatr(int [][]a, int [][]b) {
+    private boolean checkmatrices(int [][]a, int [][]b) {
         if (a == null || b == null || a.length == 0 || b.length == 0) {
             return false;
         }
@@ -57,7 +57,7 @@ public class MultMatr {
     }
     public int [][] mult(int [][]a, int [][]b) {
         //проверка корректности матриц
-        if (!checkmatr(a,b)) {
+        if (!checkmatrices(a,b)) {
             throw new IllegalArgumentException();
         }
         //
