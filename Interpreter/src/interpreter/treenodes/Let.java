@@ -46,6 +46,6 @@ public class Let extends Expression {
     
     @Override
     public String toString() {
-        return "let " + id + " = " + bound.toString() + " in " + expr.toString();
+        return "[let " + id + " = " + bound.toString() + " in " + expr.toString()+"]";
     }
 }
