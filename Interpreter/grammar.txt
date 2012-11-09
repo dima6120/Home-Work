@@ -4,6 +4,7 @@ Fun ::= 'fun' Id '->' Expr
 expr ::= term (+|- term)
 factor ::= funcall
 funcall ::= primary | primary (primary)*
+primary ::= Numb | Id | Brackets
 Brackets ::= '(' Expr ')'
 Id ::= Letter(Letter|Digit)*
 Number ::= Digit(Digit)* 
