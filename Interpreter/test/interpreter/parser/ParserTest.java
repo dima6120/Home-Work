@@ -1,9 +1,6 @@
 
 package interpreter.parser;
 
-import interpreter.Interpreter;
-import interpreter.LazyInterpreter;
-import interpreter.treenodes.Expression;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -24,10 +21,8 @@ public class ParserTest {
         System.out.println("parse1");
         String text = "let f = fun x -> fun y -> x + y in f 1 (f 1 (f 1 1))";
         Parser instance = new Parser();
-        Interpreter i = new LazyInterpreter();
-        String expResult = "4";
-        Expression e = i.evalExpr((Expression)instance.parse(text));
-        String result = e.toString();
+        String expResult = "[let f = [fun x -> [fun y -> (x + y)]] in [call [call f (1)] ([call [call f (1)] ([call [call f (1)] (1)])])]]";
+        String result = instance.parse(text).toString();
         assertEquals(expResult, result);
     }
     @Test
@@ -35,10 +30,8 @@ public class ParserTest {
         System.out.println("parse2");
         String text = "let f = fun x -> fun y -> fun z -> fun w -> (x + (y + z)*2+1)*w in let x = (1) in (f (f 1 x 3 4) x) (x) ((fun x -> f x 1 1 (x+1)) 1)";
         Parser instance = new Parser();
-        Interpreter i = new LazyInterpreter();
-        String expResult = "540";
-        Expression e = i.evalExpr((Expression)instance.parse(text));
-        String result = e.toString();
+        String expResult = "[let f = [fun x -> [fun y -> [fun z -> [fun w -> ((x + (((y + z) * 2) + 1)) * w)]]]] in [let x = 1 in [call [call [call [call f ([call [call [call [call f (1)] (x)] (3)] (4)])] (x)] (x)] ([call [fun x -> [call [call [call [call f (x)] (1)] (1)] ((x + 1))]] (1)])]]]";
+        String result = instance.parse(text).toString();
         assertEquals(expResult, result);
     }
     @Test
@@ -46,10 +39,8 @@ public class ParserTest {
         System.out.println("parse3");
         String text = "((fun x -> x) (fun x -> x + 5)) 3";
         Parser instance = new Parser();
-        Interpreter i = new LazyInterpreter();
-        String expResult = "8";
-        Expression e = i.evalExpr((Expression)instance.parse(text));
-        String result = e.toString();
+        String expResult = "[call [call [fun x -> x] ([fun x -> (x + 5)])] (3)]";
+        String result = instance.parse(text).toString();
         assertEquals(expResult, result);
     }
     @Test
@@ -57,10 +48,8 @@ public class ParserTest {
         System.out.println("parse4");
         String text = "let f = fun x -> x + 1 in f (let y = 1 in f y)";
         Parser instance = new Parser();
-        Interpreter i = new LazyInterpreter();
-        String expResult = "3";
-        Expression e = i.evalExpr((Expression)instance.parse(text));
-        String result = e.toString();
+        String expResult = "[let f = [fun x -> (x + 1)] in [call f ([let y = 1 in [call f (y)]])]]";
+        String result = instance.parse(text).toString();
         assertEquals(expResult, result);
     }
      @Test
@@ -68,10 +57,8 @@ public class ParserTest {
         System.out.println("parse5");
         String text = "let f = fun x -> x + 1 in f (f 2) / f 1";
         Parser instance = new Parser();
-        Interpreter i = new LazyInterpreter();
-        String expResult = "2";
-        Expression e = i.evalExpr((Expression)instance.parse(text));
-        String result = e.toString();
+        String expResult = "[let f = [fun x -> (x + 1)] in ([call f ([call f (2)])] / [call f (1)])]";
+        String result = instance.parse(text).toString();
         assertEquals(expResult, result);
     }
     
