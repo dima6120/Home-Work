@@ -10,7 +10,5 @@ import partlycloudy.Cloud;
 
 public class Main {
     public static void main(String[] args) {
-        Cloud c = new Cloud();
-        c.create();
     }
 }

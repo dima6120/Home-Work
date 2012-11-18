@@ -8,27 +8,17 @@ package partlycloudy;
 
 
 public class Cloud {
-    private IDayLight daylight = new IDayLight() {
-
-        @Override
-        public DayLightType current() {
-            return DayLightType.DAY;
-        }
-    };
-    private ILuminary luminary = new ILuminary() {
-
-        @Override
-        public boolean isShining() {
-            return true;
-        }
-    };
-    private IWind wind = new IWind() {
-
-        @Override
-        public int getPower() {
-            return 8;
-        }
-    };
+    private IDayLight daylight;
+    private ILuminary luminary;
+    private IWind wind;
+    private IMagic magic; 
+    
+    public Cloud(IWind w, ILuminary l, IDayLight dl, IMagic m) {
+        wind = w;
+        luminary = l;
+        daylight = dl;
+        magic = m;
+    }
 
     private Creature internalCreate()
     {
@@ -83,7 +73,7 @@ public class Cloud {
     public Creature create()
     {
         Creature creature = internalCreate();
-        Magic magic = new Magic();
+        
         if (creature != null) { 
             switch (creature.getCreatureType()) {
                 case PUPPY:
