@@ -1,18 +1,19 @@
 /**
  * Копытов Дмитрий Сергеевич, (с) 2012 год 
- * Magic
+ * BMagic
  * @author dima6120
  */
 
 package partlycloudy;
 
+public class BMagic implements IMagic {
 
-public class Magic {
+    @Override
     public void callDaemon(CreatureType ct) {
-        
+    }
+
+    @Override
+    public void callStork(CreatureType ct) {
     }
     
-    public void callStork(CreatureType ct) {
-        
-    }
 }

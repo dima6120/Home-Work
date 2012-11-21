@@ -7,4 +7,4 @@
 package partlycloudy;
 
 
-public enum CreatureType {PUPPY, KITTTEN, HEDGEHOG, PIGLET, BAT, BALLOON, BEARCUB}
+public enum CreatureType {PUPPY, KITTTEN, HEDGEHOG, PIGLET, BAT, BALLOON, BEARCUB, NOTCREATURE}

@@ -22,71 +22,91 @@ public class Cloud {
 
     private Creature internalCreate()
     {
+        int w = wind.getPower();
         if (luminary.isShining()) {
-            if (wind.getPower() == 2 || wind.getPower() == 3) {
-                if (daylight.current() == DayLightType.MORNING) {
-                    return new Creature(CreatureType.KITTTEN);
-                }
-                return null;
-            }
-            if (wind.getPower() == 4 || wind.getPower() == 5) {
-                if (daylight.current() == DayLightType.NIGHT) {
-                    return new Creature(CreatureType.HEDGEHOG);
-                }
-                return null;
-            }
-            if (wind.getPower() == 8 || wind.getPower() == 9) {
-                if (daylight.current() == DayLightType.DAY) {
-                    return new Creature(CreatureType.BALLOON);
-                }
-                return null;
+            switch(daylight.current()) {
+                case MORNING:
+                    if (w == 2 || w == 3) {
+                        return new Creature(CreatureType.KITTTEN);
+                    }
+                    return new Creature(CreatureType.NOTCREATURE);
+                case DAY:
+                    if (w == 0 || w == 1 || (w >= 4 && w <= 6)) {
+                        return new Creature(CreatureType.HEDGEHOG);
+                    }
+                    if (w >= 7 && w <= 10) {
+                        return new Creature(CreatureType.BALLOON);
+                    }
+                    return new Creature(CreatureType.NOTCREATURE);
+                case EVENING:
+                    return new Creature(CreatureType.NOTCREATURE);
+                case NIGHT:
+                    if (w == 0 || w == 1 || (w >= 4 && w <= 6)) {
+                        return new Creature(CreatureType.HEDGEHOG);
+                    }
+                    if (w >= 7 && w <= 10) {
+                        return new Creature(CreatureType.BALLOON);
+                    }
+                    return new Creature(CreatureType.NOTCREATURE);
             }
         } else {
-            if (wind.getPower() == 1) {
-                if (daylight.current() == DayLightType.DAY) {
-                    return new Creature(CreatureType.PUPPY);
-                }
-                return null;
-            } 
-            if (wind.getPower() == 6) {
-                if (daylight.current() == DayLightType.EVENING) {
-                    return new Creature(CreatureType.PIGLET);
-                }
-                return null;
-            } 
-            if (wind.getPower() == 7) {
-                if (daylight.current() == DayLightType.NIGHT) {
-                    return new Creature(CreatureType.BAT);
-                }
-                return null;
-            } 
-            if (wind.getPower() == 10) {
-                if (daylight.current() == DayLightType.MORNING) {
-                    return new Creature(CreatureType.BEARCUB);
-                }
-                return null;
-            } 
+            switch(daylight.current()) {
+                case MORNING:
+                    if (w >= 0 && w <= 3) {
+                        return new Creature(CreatureType.PUPPY);
+                    }
+                    if (w == 9 || w == 10) {
+                        return new Creature(CreatureType.BEARCUB);
+                    }
+                    return new Creature(CreatureType.NOTCREATURE);
+                case DAY:
+                    if (w >= 0 && w <= 3) {
+                        return new Creature(CreatureType.PUPPY);
+                    }
+                    if (w == 7 || w == 8) {
+                        return new Creature(CreatureType.BAT);
+                    }
+                    return new Creature(CreatureType.NOTCREATURE);
+                case EVENING:
+                    if (w >= 0 && w <= 3) {
+                        return new Creature(CreatureType.PUPPY);
+                    }
+                    if (w >= 4 && w <= 6) {
+                        return new Creature(CreatureType.PIGLET);
+                    }
+                    return new Creature(CreatureType.NOTCREATURE);
+                case NIGHT:
+                    if (w >= 4 && w <= 6) {
+                        return new Creature(CreatureType.PIGLET);
+                    }
+                    if (w == 7 || w == 8) {
+                        return new Creature(CreatureType.BAT);
+                    }
+                    if (w == 9 || w == 10) {
+                        return new Creature(CreatureType.BEARCUB);
+                    }
+                    return new Creature(CreatureType.NOTCREATURE);
+            }
         }
-        return null;
+        return new Creature(CreatureType.NOTCREATURE);
     }
  
     public Creature create()
     {
         Creature creature = internalCreate();
-        
-        if (creature != null) { 
-            switch (creature.getCreatureType()) {
-                case PUPPY:
-                case PIGLET:
-                case BALLOON:
-                    magic.callDaemon(creature.getCreatureType());
-                    break;
-                case KITTTEN:
-                case HEDGEHOG:
-                case BAT:  
-                case BEARCUB:
-                    magic.callStork(creature.getCreatureType());
-            }
+         
+        switch (creature.getCreatureType()) {
+            case PUPPY:
+            case PIGLET:
+            case BALLOON:
+                magic.callDaemon(creature.getCreatureType());
+                break;
+            case KITTTEN:
+            case HEDGEHOG:
+            case BAT:  
+            case BEARCUB:
+                magic.callStork(creature.getCreatureType());
+            default:
         }
 
         return creature;
