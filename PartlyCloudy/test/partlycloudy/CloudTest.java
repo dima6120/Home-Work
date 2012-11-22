@@ -13,6 +13,11 @@ import org.junit.Test;
 
 public class CloudTest extends TestCase {
     Mockery context = new Mockery();
+    final IDayLight daylight = context.mock(IDayLight.class);
+    final IWind wind = context.mock(IWind.class);
+    final ILuminary luminary = context.mock(ILuminary.class);
+    final IMagic magic = context.mock(IMagic.class);
+    final Cloud cloud = new Cloud(wind, luminary, daylight, magic);
     
     class MWind implements IWind {
         private int i;
@@ -88,84 +93,155 @@ public class CloudTest extends TestCase {
             System.out.println(i);
         }
     }
+    
     @Test
-    public void testCloudDynamicMocks() {
-        final IDayLight daylight = context.mock(IDayLight.class);
-        final IWind wind = context.mock(IWind.class);
-        final ILuminary luminary = context.mock(ILuminary.class);
-        final IMagic magic = context.mock(IMagic.class);
-        final Cloud cloud = new Cloud(wind, luminary, daylight, magic);    
-               
-        System.out.println("testCloudDynamicMocks");
+    public void testCloudDynMCreatePuppy() {
+        System.out.print("testCloudDynMCreatePuppy:");
         
         Expectations exp = new Expectations() {{
-                one(luminary).isShining(); will(returnValue(false)/*doAll(
-                                                        returnValue(false),
-                                                        returnValue(true),
-                                                        returnValue(false),
-                                                        returnValue(true),
-                                                        returnValue(true),
-                                                        returnValue(false),
-                                                        returnValue(false),
-                                                        returnValue(false),
-                                                        returnValue(true),
-                                                        returnValue(false),
-                                                        returnValue(true),
-                                                        returnValue(true)
-                                                     )*/
-                                               );
-                one(wind).getPower(); will(returnValue(0)/*doAll(
-                                                    returnValue(0),
-                                                    returnValue(1),
-                                                    returnValue(2),
-                                                    returnValue(3),
-                                                    returnValue(4),
-                                                    returnValue(5),
-                                                    returnValue(6),
-                                                    returnValue(7),
-                                                    returnValue(8),
-                                                    returnValue(9),
-                                                    returnValue(10),
-                                                    returnValue(2)
-                                                 )*/
-                                           );
-                one(daylight).current(); will( returnValue(DayLightType.DAY)
-                                                /*doAll(
-                                                        returnValue(DayLightType.DAY),
-                                                        returnValue(DayLightType.NIGHT),
-                                                        returnValue(DayLightType.EVENING),
-                                                        returnValue(DayLightType.MORNING),
-                                                        returnValue(DayLightType.NIGHT),
-                                                        returnValue(DayLightType.EVENING),
-                                                        returnValue(DayLightType.NIGHT),
-                                                        returnValue(DayLightType.NIGHT),
-                                                        returnValue(DayLightType.DAY),
-                                                        returnValue(DayLightType.MORNING),
-                                                        returnValue(DayLightType.NIGHT),
-                                                        returnValue(DayLightType.DAY)
-                                                     )*/
-                                               );
-                one(magic).callDaemon(CreatureType.PUPPY);
-                /*atMost(1).of(magic).callDaemon(with(
-                                                    Matchers.anyOf(equal(CreatureType.PUPPY),
-                                                                   equal(CreatureType.PIGLET),
-                                                                   equal(CreatureType.BALLOON)
-                                                                  )
-                                                  )
-                                             ); 
-                atMost(1).of(magic).callStork(with(
-                                                    Matchers.anyOf(equal(CreatureType.BAT),
-                                                                   equal(CreatureType.BEARCUB),
-                                                                   equal(CreatureType.HEDGEHOG),
-                                                                   equal(CreatureType.KITTTEN)
-                                                                  )
-                                                  )
-                                             );*/
+                one(luminary).isShining(); will(returnValue(true));
+                one(wind).getPower(); will(returnValue(1));
+                one(daylight).current(); will(returnValue(DayLightType.NIGHT));
+                one(magic).callStork(CreatureType.HEDGEHOG);
             }};
         context.checking(exp);
            
         cloud.create();
 
         context.assertIsSatisfied();
+        
+        System.out.println("ok");
+    }
+    
+    @Test
+    public void testCloudDynMCreateKitten() {
+        System.out.print("testCloudDynMCreateKitten:");
+        
+        Expectations exp = new Expectations() {{
+                one(luminary).isShining(); will(returnValue(true));
+                one(wind).getPower(); will(returnValue(2));
+                one(daylight).current(); will(returnValue(DayLightType.NIGHT));
+                one(magic).callStork(CreatureType.KITTTEN);
+            }};
+        context.checking(exp);
+           
+        cloud.create();
+
+        context.assertIsSatisfied();
+        
+        System.out.println("ok");
+    }
+    
+    @Test
+    public void testCloudDynMCreateHedgehog() {
+        System.out.print("testCloudDynMCreateHedgehog:");
+        
+        Expectations exp = new Expectations() {{
+                one(luminary).isShining(); will(returnValue(false));
+                one(wind).getPower(); will(returnValue(0));
+                one(daylight).current(); will(returnValue(DayLightType.DAY));
+                one(magic).callDaemon(CreatureType.PUPPY);
+            }};
+        context.checking(exp);
+           
+        cloud.create();
+
+        context.assertIsSatisfied();
+        
+        System.out.println("ok");
+    }
+    
+    @Test
+    public void testCloudDynMCreatePiglet() {
+        System.out.print("testCloudDynMCreatePiglet");
+        
+        Expectations exp = new Expectations() {{
+                one(luminary).isShining(); will(returnValue(false));
+                one(wind).getPower(); will(returnValue(4));
+                one(daylight).current(); will(returnValue(DayLightType.EVENING));
+                one(magic).callDaemon(CreatureType.PIGLET);
+            }};
+        context.checking(exp);
+           
+        cloud.create();
+
+        context.assertIsSatisfied();
+        
+        System.out.println("ok");
+    }
+    
+    @Test
+    public void testCloudDynMCreateBat() {
+        System.out.print("testCloudDynMCreateBat:");
+        
+        Expectations exp = new Expectations() {{
+                one(luminary).isShining(); will(returnValue(false));
+                one(wind).getPower(); will(returnValue(7));
+                one(daylight).current(); will(returnValue(DayLightType.NIGHT));
+                one(magic).callStork(CreatureType.BAT);
+            }};
+        context.checking(exp);
+           
+        cloud.create();
+
+        context.assertIsSatisfied();
+        
+        System.out.println("ok");
+    }
+    
+    @Test
+    public void testCloudDynMCreateBallon() {
+        System.out.print("testCloudDynMCreateBallon:");
+        
+        Expectations exp = new Expectations() {{
+                one(luminary).isShining(); will(returnValue(true));
+                one(wind).getPower(); will(returnValue(7));
+                one(daylight).current(); will(returnValue(DayLightType.NIGHT));
+                one(magic).callDaemon(CreatureType.BALLOON);
+            }};
+        context.checking(exp);
+           
+        cloud.create();
+
+        context.assertIsSatisfied();
+        
+        System.out.println("ok");
+    }
+    
+    @Test
+    public void testCloudDynMCreateBearcub() {
+        System.out.print("testCloudDynMCreateBearcub:");
+        
+        Expectations exp = new Expectations() {{
+                one(luminary).isShining(); will(returnValue(false));
+                one(wind).getPower(); will(returnValue(9));
+                one(daylight).current(); will(returnValue(DayLightType.NIGHT));
+                one(magic).callStork(CreatureType.BEARCUB);
+            }};
+        context.checking(exp);
+           
+        cloud.create();
+
+        context.assertIsSatisfied();
+        
+        System.out.println("ok");
+    }
+    
+    @Test
+    public void testCloudDynMCreateNotCreature() {
+        System.out.print("testCloudDynMCreateNotCreature:");
+        
+        Expectations exp = new Expectations() {{
+                one(luminary).isShining(); will(returnValue(true));
+                one(wind).getPower(); will(returnValue(2));
+                one(daylight).current(); will(returnValue(DayLightType.DAY));
+            }};
+        context.checking(exp);
+           
+        cloud.create();
+
+        context.assertIsSatisfied();
+        
+        System.out.println("ok");
     }
 }

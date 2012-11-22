@@ -41,6 +41,9 @@ public class Cloud {
                 case EVENING:
                     return new Creature(CreatureType.NOTCREATURE);
                 case NIGHT:
+                    if (w == 2 || w == 3) {
+                        return new Creature(CreatureType.KITTTEN);
+                    }
                     if (w == 0 || w == 1 || (w >= 4 && w <= 6)) {
                         return new Creature(CreatureType.HEDGEHOG);
                     }
@@ -52,9 +55,6 @@ public class Cloud {
         } else {
             switch(daylight.current()) {
                 case MORNING:
-                    if (w >= 0 && w <= 3) {
-                        return new Creature(CreatureType.PUPPY);
-                    }
                     if (w == 9 || w == 10) {
                         return new Creature(CreatureType.BEARCUB);
                     }
