@@ -1,13 +1,14 @@
+/**
+ * Копытов Дмитрий Сергеевич, (с) 2012 год
+ * ParserTest
+ * @author dima6120
+ */
 
 package interpreter.parser;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-/**
- * ParserTest
- * @author dima6120
- */
 public class ParserTest {
 
     public ParserTest() {
