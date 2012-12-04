@@ -1,7 +1,7 @@
-Expr ::= Let | Fun | expr
+Expr ::= Let | Fun | aexpr
 Let ::= 'let' Id '=' Expr 'in' Expr
 Fun ::= 'fun' Id '->' Expr
-expr ::= term (+|- term)
+aexpr ::= term (+|- term)
 term ::= factor (*|/ factor)*
 factor ::= funcall
 funcall ::= primary | primary (primary)*
