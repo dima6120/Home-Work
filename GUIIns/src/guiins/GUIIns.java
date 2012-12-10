@@ -6,7 +6,6 @@
 
 package guiins;
 
-import java.awt.Image;
 import java.awt.event.*;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -17,10 +16,11 @@ import javax.swing.*;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 
-public class GUIIns extends JFrame {
+public class GUIIns extends JFrame implements DispatchListener{
     private JMenuBar MenuBar = new JMenuBar();
     private JMenu FileMenu = new JMenu();
     private JMenuItem ExitItem = new JMenuItem();
+    private JMenuItem SendItem = new JMenuItem(); 
     private JMenu HelpMenu = new JMenu();
     private JMenu AboutMenu = new JMenu();
     private JFormattedTextField CelsiusField = new JFormattedTextField();
@@ -30,9 +30,17 @@ public class GUIIns extends JFrame {
     private JLabel KL = new JLabel();
     private JLabel FL = new JLabel();
     private About about = new About();
+    private Dispatch disp = new Dispatch();
+    private DispatchFrame df = new DispatchFrame();
+    private SetEmailFrame sef = new SetEmailFrame(this); 
     
     private void ExitItemActionPerformed(ActionEvent evt) {
-        this.dispose();
+        processWindowEvent(new WindowEvent(this,WindowEvent.WINDOW_CLOSING));
+    }
+    
+    private void SendItemActionPerformed(ActionEvent evt) {
+        sef.setLocationRelativeTo(this);
+        sef.setVisible(true);
     }
     
     private void CelsiusFieldKeyPressed(KeyEvent evt) {
@@ -57,7 +65,7 @@ public class GUIIns extends JFrame {
         } 
     }
     
-    public void KelvinFieldKeyPressed(KeyEvent evt) {
+    private void KelvinFieldKeyPressed(KeyEvent evt) {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER && !"".equals(KelvinField.getText())) {
             try {
                 KelvinField.setValue(KelvinField.getFormatter().stringToValue(KelvinField.getText()));
@@ -79,7 +87,7 @@ public class GUIIns extends JFrame {
         }
     }
     
-    public void FahrenheitFieldKeyPressed(KeyEvent evt) {
+    private void FahrenheitFieldKeyPressed(KeyEvent evt) {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER && !"".equals(FahrenheitField.getText())) {
             try {
                 FahrenheitField.setValue(FahrenheitField.getFormatter().stringToValue(FahrenheitField.getText()));
@@ -101,7 +109,7 @@ public class GUIIns extends JFrame {
         }
     }
     
-    public void HelpMouseClicked(MouseEvent evt) {
+    private void HelpMouseClicked(MouseEvent evt) {
         try {
             Runtime.getRuntime().exec("cmd /c notepad.exe readme.txt");
         } catch (IOException ex) {
@@ -109,16 +117,19 @@ public class GUIIns extends JFrame {
         }
     }
     
-    public void AboutMouseClicked(MouseEvent evt) {
+    private void AboutMouseClicked(MouseEvent evt) {
+        about.setLocationRelativeTo(this);
         about.setVisible(true);
     }
     
-    private void Init() {
+    private void init() {
        ImageIcon img = new ImageIcon("icon.png");
        this.setIconImage(img.getImage());
-       
+       this.setLocationRelativeTo(null);
        this.setResizable(false);
        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       
+       
        
        CelsiusField.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#0"))));
        CelsiusField.addKeyListener(new KeyAdapter() {
@@ -142,15 +153,23 @@ public class GUIIns extends JFrame {
        KL.setText("K");
        FL.setText("F");
        
-       
        FileMenu.setText("File");
        ExitItem.setText("Exit");
+       SendItem.setText("Send results");
        ExitItem.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ExitItemActionPerformed(evt);
             }
         });
+       SendItem.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SendItemActionPerformed(evt);
+            }
+        }); 
+       
+       FileMenu.add(SendItem);
        FileMenu.add(ExitItem);
        
        HelpMenu.setText("Help");
@@ -214,10 +233,35 @@ public class GUIIns extends JFrame {
     
     public GUIIns() {
         super("TempConv");
-        Init();
+        init();
     }
     public static void main(String[] args) {
         GUIIns app = new GUIIns();
         app.setVisible(true);
+    }
+
+    @Override
+    public void dispatchfinished(boolean success) {
+        SendItem.setEnabled(true);
+        df.setVisible(false);
+        String mes;
+        mes = success ? "Mail was sent successfully" : "Message wasn't sent";
+        ReportFrame rf = new ReportFrame(mes);
+        rf.setLocationRelativeTo(df);
+        rf.setVisible(true);
+    }
+
+    @Override
+    public void dispatchbegin(String addr) {
+        String []mes = new String[3]; 
+        
+        mes[0] = CelsiusField.getText() + " " + "C";
+        mes[1] = KelvinField.getText() + " " + "K";
+        mes[2] = FahrenheitField.getText() + " " + "F";
+        
+        SendItem.setEnabled(false);
+        df.setLocationRelativeTo(df);
+        df.setVisible(true);
+        disp.dispatch(this, mes, addr);
     }
 }
