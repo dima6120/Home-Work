@@ -9,12 +9,17 @@ package guiins;
 import java.awt.event.*;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.text.ParseException;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
+
+
+abstract class JFTField extends JFormattedTextField implements Observer{
+}
 
 public class GUIIns extends JFrame implements DispatchListener{
     private JMenuBar MenuBar = new JMenuBar();
@@ -23,9 +28,9 @@ public class GUIIns extends JFrame implements DispatchListener{
     private JMenuItem SendItem = new JMenuItem(); 
     private JMenu HelpMenu = new JMenu();
     private JMenu AboutMenu = new JMenu();
-    private JFormattedTextField CelsiusField = new JFormattedTextField();
-    private JFormattedTextField FahrenheitField = new JFormattedTextField();
-    private JFormattedTextField KelvinField = new JFormattedTextField(); 
+    private JFTField CelsiusField;
+    private JFTField FahrenheitField;
+    private JFTField KelvinField;
     private JLabel CL = new JLabel();
     private JLabel KL = new JLabel();
     private JLabel FL = new JLabel();
@@ -33,6 +38,7 @@ public class GUIIns extends JFrame implements DispatchListener{
     private Dispatch disp = new Dispatch();
     private DispatchFrame df = new DispatchFrame();
     private SetEmailFrame sef = new SetEmailFrame(this); 
+    private FieldsController fc;
     
     private void ExitItemActionPerformed(ActionEvent evt) {
         processWindowEvent(new WindowEvent(this,WindowEvent.WINDOW_CLOSING));
@@ -45,67 +51,19 @@ public class GUIIns extends JFrame implements DispatchListener{
     
     private void CelsiusFieldKeyPressed(KeyEvent evt) {
        if (evt.getKeyCode() == KeyEvent.VK_ENTER && !"".equals(CelsiusField.getText())) {
-            try {
-                CelsiusField.setValue(CelsiusField.getFormatter().stringToValue(CelsiusField.getText()));
-                
-            } catch (ParseException ex) {
-                CelsiusField.setText("");
-                KelvinField.setText("");
-                FahrenheitField.setText("");
-                return;
-            }
-            if (!"".equals(CelsiusField.getText())) {
-                int v = Integer.parseInt(CelsiusField.getText());
-                KelvinField.setText(Integer.toString(v + 273));
-                FahrenheitField.setText(Long.toString(Math.round(v * 9/5 + 32)));
-            } else {
-                KelvinField.setText("");
-                FahrenheitField.setText("");
-            }
+           fc.setChanges(FieldType.CF, CelsiusField.getText());
         } 
     }
     
     private void KelvinFieldKeyPressed(KeyEvent evt) {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER && !"".equals(KelvinField.getText())) {
-            try {
-                KelvinField.setValue(KelvinField.getFormatter().stringToValue(KelvinField.getText()));
-                
-            } catch (ParseException ex) {
-                CelsiusField.setText("");
-                KelvinField.setText("");
-                FahrenheitField.setText("");
-                return;
-            }
-            if (!"".equals(KelvinField.getText())) {
-                int v = Integer.parseInt(KelvinField.getText());
-                CelsiusField.setText(Integer.toString(v - 273));
-                FahrenheitField.setText(Long.toString(Math.round(v * 9/5 - 459)));
-            } else {
-                CelsiusField.setText("");
-                FahrenheitField.setText("");
-            }
+            fc.setChanges(FieldType.KF, KelvinField.getText());
         }
     }
     
     private void FahrenheitFieldKeyPressed(KeyEvent evt) {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER && !"".equals(FahrenheitField.getText())) {
-            try {
-                FahrenheitField.setValue(FahrenheitField.getFormatter().stringToValue(FahrenheitField.getText()));
-                
-            } catch (ParseException ex) {
-                CelsiusField.setText("");
-                KelvinField.setText("");
-                FahrenheitField.setText("");
-                return;
-            }
-            if (!"".equals(FahrenheitField.getText())) {
-                int v = Integer.parseInt(FahrenheitField.getText());
-                CelsiusField.setText(Long.toString(Math.round(v - 32)*5/9));
-                KelvinField.setText(Long.toString(Math.round((v + 459.67)*5/9)));
-            } else {
-                CelsiusField.setText("");
-                KelvinField.setText("");
-            }
+            fc.setChanges(FieldType.FF, FahrenheitField.getText());
         }
     }
     
@@ -129,7 +87,12 @@ public class GUIIns extends JFrame implements DispatchListener{
        this.setResizable(false);
        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        
-       
+       CelsiusField = new JFTField() {
+            @Override
+            public void update(Observable o, Object o1) {
+                setText(((FieldPackage)o1).getCel());
+            }
+        };
        
        CelsiusField.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#0"))));
        CelsiusField.addKeyListener(new KeyAdapter() {
@@ -139,6 +102,13 @@ public class GUIIns extends JFrame implements DispatchListener{
             }
        });
  
+       KelvinField = new JFTField() {
+            @Override
+            public void update(Observable o, Object o1) {
+                setText(((FieldPackage)o1).getKel());
+            }
+        };
+       
        KelvinField.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#0"))));
        KelvinField.addKeyListener(new KeyAdapter() {
             @Override
@@ -147,11 +117,30 @@ public class GUIIns extends JFrame implements DispatchListener{
             }
        });
        
+       FahrenheitField = new JFTField() {
+            @Override
+            public void update(Observable o, Object o1) {
+                setText(((FieldPackage)o1).getFar());
+            }
+        };
+       
        FahrenheitField.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#0"))));
+       
+       FahrenheitField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent evt) {
+                FahrenheitFieldKeyPressed(evt);
+            }
+       });
        
        CL.setText("C");
        KL.setText("K");
        FL.setText("F");
+       
+       fc = new FieldsController(KelvinField.getFormatter());
+       fc.addObserver(CelsiusField);
+       fc.addObserver(KelvinField);
+       fc.addObserver(FahrenheitField);
        
        FileMenu.setText("File");
        ExitItem.setText("Exit");
